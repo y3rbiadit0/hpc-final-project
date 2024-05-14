@@ -13,7 +13,7 @@ int main(int argc, char **argv){
 	//Init MPI_Library
 	MPI_Init(&argc, &argv);
 		
-	//Set communicator which will belong process ( MPI_COMM_WORLD)
+	//Set communicator which will belong process (MPI_COMM_WORLD)
 	MPI_Comm_rank(MPI_COMM_WORLD, &node);
 	MPI_Comm_size(MPI_COMM_WORLD, &size_of_cluster);
 	
