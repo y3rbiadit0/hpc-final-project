@@ -2,17 +2,15 @@
 #define HPC_TIME_EXPERIMENT_H
 #include "time_report.h"
 #include <string>
-
+#include <vector>
 class ExperimentStatistic {
-    unsigned int dataArraySize = 0;
-    double* dataArray = nullptr;
+    std::vector<double> data;    
 
     public:
         double max();
         double min();
         double median();
         double avg();
-        double mean();
         double dumpToCSV(std::string file_path);
 
 };
@@ -20,20 +18,28 @@ class ExperimentStatistic {
 
 class ExperimentArgs{
     public:
+    // Parameterized Constructor
+    ExperimentArgs(unsigned int numberOfWarmupArg, unsigned int numberOfRunsArg, unsigned int bufferSizeArg)
+    {
+        numberOfRuns = numberOfRunsArg;
+        numberOfWarmup = numberOfWarmupArg;
+        bufferSize = bufferSizeArg;
+    }
+
         unsigned int numberOfWarmup;
         unsigned int numberOfRuns;
         unsigned int bufferSize;
 };
 
 class ExperimentRunner {
-    
-    TimeReport* timeReports = nullptr;
     public:
-        unsigned int numberOfWarmup;
-        unsigned int numberOfRuns;
-        unsigned int numberOf
+        ExperimentRunner(ExperimentArgs* args){
+            experimentArgs = args;
+            timeReports = std::vector<TimeReport>(args->numberOfRuns);
+        }
 
-
+        ExperimentArgs *experimentArgs;
+        std::vector<TimeReport> timeReports;    
 };
 
 
