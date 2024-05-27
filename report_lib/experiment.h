@@ -1,20 +1,9 @@
 #ifndef HPC_TIME_EXPERIMENT_H
 #define HPC_TIME_EXPERIMENT_H
-#include "time_report.h"
 #include <string>
 #include <vector>
-class ExperimentStatistic {
-    std::vector<double> data;    
 
-    public:
-        double max();
-        double min();
-        double median();
-        double avg();
-        double dumpToCSV(std::string file_path);
-
-};
-
+#include "time_report.h"
 
 class ExperimentArgs{
     public:

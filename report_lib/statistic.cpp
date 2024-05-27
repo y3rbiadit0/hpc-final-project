@@ -1,8 +1,7 @@
-#include "experiment.h"
 #include <numeric>
 #include <stdexcept>
 #include <algorithm>
-
+#include "statistic.h"
 
 double ExperimentStatistic::max(){
     if (data.empty()) {
