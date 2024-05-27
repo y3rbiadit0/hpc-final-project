@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     }
 
     //2. Report Timings on experiment
-    for (int i = 0; i < experimentArgs.numberOfWarmup; i++){
+    for (int i = 0; i < experimentArgs.numberOfRuns; i++){
         //TODO: runExperiment
         //Dummy Line just to compile
         TimeReport timeReport = TimeReport();
