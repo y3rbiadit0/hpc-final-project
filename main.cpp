@@ -15,12 +15,12 @@ int main(int argc, char* argv[]) {
 
 
     //1. Do the warmpup Runs
-    for (int i = 0; i < experimentArgs.numberOfWarmup; ++i){
+    for (int i = 0; i < experimentArgs.numberOfWarmup; i++){
         //TODO: runExperiment
     }
 
     //2. Report Timings on experiment
-    for (int i = 0; i < experimentArgs.numberOfWarmup; ++i){
+    for (int i = 0; i < experimentArgs.numberOfWarmup; i++){
         //TODO: runExperiment
         //Dummy Line just to compile
         TimeReport timeReport = TimeReport();
