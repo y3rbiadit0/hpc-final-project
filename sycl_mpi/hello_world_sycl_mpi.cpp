@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
   const int nelem = 20; // Buffer Elements number
   const size_t nsize = nelem * sizeof(int); //Buffer
   std::vector<int> data(nelem, -1);
+  sycl::buffer<int> buf1 {data};
 
   // Create SYCL USM for each node in device (GPU)
   int *devp = sycl::malloc_device<int>(nelem, q);
@@ -44,7 +45,8 @@ int main(int argc, char *argv[]) {
 
     // Operate on the node_id 0 data.
     auto pf = [&](sycl::handler &h) {
-      auto kern = [=](sycl::id<1> id) { devp[id] *= 2; };
+      sycl::accessor<int, 1> acc1{buf1, h}; 
+      auto kern = [=](sycl::id<1> id) { acc1[id] *= 2; };
       h.parallel_for(sycl::range<1>{nelem}, kern);
     };
 
