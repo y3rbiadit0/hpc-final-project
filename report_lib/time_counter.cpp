@@ -1,11 +1,11 @@
-#include "time_counter.h"
 #include <mpi.h>
+#include "time_counter.h"
 
-double TimeCounter::start(){
+void TimeCounter::start(){
     time = MPI_Wtime();
 }
 
-double TimeCounter::end(){
+void TimeCounter::end(){
     time = MPI_Wtime() - time;    
 }
 

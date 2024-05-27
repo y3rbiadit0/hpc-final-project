@@ -17,7 +17,7 @@ class ExperimentStatistic {
         double min();
         double median();
         double avg();
-        double dumpToCSV(std::string file_path);
+        void dumpToCSV(std::string file_path);
 
 };
 

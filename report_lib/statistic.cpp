@@ -36,7 +36,7 @@ double ExperimentStatistic::avg(){
     double sum = std::accumulate(data.begin(), data.end(), 0.0);
     return sum / data.size();
 }
-double ExperimentStatistic::dumpToCSV(std::string file_path){
+void ExperimentStatistic::dumpToCSV(std::string file_path){
     //TODO: To implement
 }
 

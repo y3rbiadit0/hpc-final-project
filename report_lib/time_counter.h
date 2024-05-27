@@ -6,11 +6,9 @@ class TimeCounter {
         double time;
     public:
         // Call MPI_WTime
-        double start();
+        void start();
         // Call MPI_WTime
-        double end();
-
-        // return `time`
+        void end();
         double get_time();
 };
 
