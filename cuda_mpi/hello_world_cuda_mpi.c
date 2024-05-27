@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 	// Move Data from CPU -> Device
 	cudaMemcpy(sBuf_d, sBuf_h, bufferSize, cudaMemcpyHostToDevice);
 	
-	// Send Data 
+	// Send Data GPU to GPU
 	if (node_id == 0) {
     	MPI_Recv(rBuf_d, LBUF, MPI_REAL, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     } else if (node_id == 1) {
