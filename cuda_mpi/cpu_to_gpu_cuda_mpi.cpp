@@ -7,7 +7,7 @@
 #include "../report_lib/time_report.h"
 
 
-TimeReport cpu_to_gpu_cuda (int argc, char* argv[], ExperimentArgs experimentArgs){
+TimeReport cpu_to_gpu_cuda_mpi (int argc, char* argv[], ExperimentArgs experimentArgs){
     TimeReport timeReport= TimeReport();
 
     //MPI - Node ID
