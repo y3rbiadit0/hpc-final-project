@@ -4,6 +4,7 @@
 
 #include "report_lib/statistic.h"
 #include "sycl_mpi/cpu_to_gpu.cpp"
+#include "cuda_mpi/cpu_to_gpu_cuda_mpi.cpp"
 
 using namespace std;
 
@@ -22,13 +23,17 @@ int main(int argc, char* argv[]) {
         argc, argv, numberOfWarmups, numberOfRuns, bufferSize
     );
     
-    CPUtoGPU_Sycl_MPI experiment = CPUtoGPU_Sycl_MPI();
+    CPUtoGPU_Sycl_MPI sycl_CPUtoGPU_experiment = CPUtoGPU_Sycl_MPI();
 
-    ExperimentRunner cpu_to_gpu_sycl_mpi = ExperimentRunner(&experimentArgs, &experiment);
+    ExperimentRunner cpu_to_gpu_sycl_mpi = ExperimentRunner(&experimentArgs, &sycl_CPUtoGPU_experiment);
+
+    CPUtoGPU_CUDA_MPI cuda_CPUtoGPU_experiment= CPUtoGPU_CUDA_MPI();
+    ExperimentRunner cpu_to_gpu_cuda_mpi= ExperimentRunner(&experimentArgs, &cuda_CPUtoGPU_experiment);
 
     MPI_Init(&argc, &argv);
 
     cpu_to_gpu_sycl_mpi.runExperiment();
+    cpu_to_gpu_cuda_mpi.runExperiment();
 
     MPI_Finalize();
 }
