@@ -35,12 +35,15 @@ int main(int argc, char* argv[]) {
     GPUtoGPU_CUDA_NVLINK cuda_gpu_to_gpu_nvlink= GPUtoGPU_CUDA_NVLINK();
     ExperimentRunner gpu_to_gpu_cuda_nvlink= ExperimentRunner(&experimentArgs,&cuda_gpu_to_gpu_nvlink);
 
+    GPUtoGPU_CUDA_MPI cuda_gpu_to_gpu_mpi= GPUtoGPU_CUDA_MPI();
+    ExperimentRunner gpu_to_gpu_cuda_MPI= ExperimentRunner(&experimentArgs,&cuda_gpu_to_gpu_mpi);
 
     MPI_Init(&argc, &argv);
 
-    cpu_to_gpu_sycl_mpi.runExperiment();
-    gpu_to_gpu_cuda_nvlink.runExperiment();
+    //cpu_to_gpu_sycl_mpi.runExperiment();
+    //gpu_to_gpu_cuda_nvlink.runExperiment();
     //cpu_to_gpu_cuda_mpi.runExperiment();
+    gpu_to_gpu_cuda_MPI.runExperiment();
 
     MPI_Finalize();
 }
