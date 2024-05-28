@@ -1,31 +1,36 @@
 #include <iostream>
 #include "report_lib/experiment.h"
-#include "sycl_mpi/gpu_to_gpu.cpp"
+#include "report_lib/experiment_runner.h"
 
+#include "report_lib/statistic.h"
+#include "sycl_mpi/cpu_to_gpu.cpp"
+
+using namespace std;
+
+
+double getLatency(TimeReport timeReport){
+    return timeReport.latency.get_time();
+}
 
 int main(int argc, char* argv[]) {
-    unsigned int numberOfWarmups = 3; 
+    unsigned int numberOfWarmups = 5; 
     unsigned int numberOfRuns = 5;
-    unsigned int bufferSize = 100;
+    unsigned int bufferSize = 1048576;
 
+    
     ExperimentArgs experimentArgs = ExperimentArgs(
-        numberOfWarmups, numberOfRuns, bufferSize
+        argc, argv, numberOfWarmups, numberOfRuns, bufferSize
     );
-    ExperimentRunner experimentRunner = ExperimentRunner(&experimentArgs);
+    
+    CPUtoGPU_Sycl_MPI experiment = CPUtoGPU_Sycl_MPI();
 
+    ExperimentRunner cpu_to_gpu_sycl_mpi = ExperimentRunner(&experimentArgs, &experiment);
 
-    //1. Do the warmpup Runs
-    for (int i = 0; i < experimentArgs.numberOfWarmup; i++){
-        //TODO: runExperiment
-    }
+    MPI_Init(&argc, &argv);
 
-    //2. Report Timings on experiment
-    for (int i = 0; i < experimentArgs.numberOfRuns; i++){
-        //TODO: runExperiment
-        //Dummy Line just to compile
-        TimeReport timeReport = TimeReport();
-        experimentRunner.timeReports.push_back(timeReport);
-    }
+    cpu_to_gpu_sycl_mpi.runExperiment();
 
-    //3. Calculate timings on reports
+    MPI_Finalize();
 }
+
+

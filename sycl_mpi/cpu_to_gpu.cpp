@@ -2,62 +2,65 @@
 #include <mpi.h>
 #include <sycl/sycl.hpp>
 
-void validate_nodes_size(int mpi_size, int node_id);
+#include "../report_lib/experiment.h"
+#include "../report_lib/experiment_args.h"
 
-TimeReport cpu_to_gpu_sycl_mpi(int argc, char *argv[], ExperimentArgs args)
-{
+class CPUtoGPU_Sycl_MPI: public Experiment{
+    
+    TimeReport run(ExperimentArgs args) {
+        TimeReport timeReport = TimeReport();
 
-    TimeReport timeReport = TimeReport();
+        // MPI - Node ID
+        int node_id, mpi_size;
 
-    // MPI - Node ID
-    int node_id, mpi_size;
+        // Init MPI
+        MPI_Comm_rank(MPI_COMM_WORLD, &node_id);
+        MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
-    // Init MPI
-    MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &node_id);
-    MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
+        validate_nodes_size(mpi_size, node_id);
 
-    validate_nodes_size(mpi_size, node_id);
+        // Initialize SYCL - Variables
+        int tag = 0;
+        const int nelem = args.bufferSize;        // Buffer Elements number
+        const size_t nsize = nelem * sizeof(int); // Buffer
 
-    // Initialize SYCL - Variables
-    int tag = 0;
-    const int nelem = args.bufferSize;        // Buffer Elements number
-    const size_t nsize = nelem * sizeof(int); // Buffer
+        // Initialize SYCL - Queue
+        sycl::queue q{};
 
-    // Initialize SYCL - Queue
-    sycl::queue q{};
+        // Create and initialize the host buffer -- Initialize with 1s
+        std::vector<int> hostData(nsize, 1);
+        sycl::buffer<int, 1> buffer(hostData.data(), sycl::range<1>(nsize));
 
-    // Create and initialize the host buffer -- Initialize with 1s
-    std::vector<int> hostData(nsize, 1);
-    sycl::buffer<int, 1> buffer(hostData.data(), sycl::range<1>(nsize));
+        // Measure the time to transfer the buffer
+        timeReport.latency.start();
 
-    // Measure the time to transfer the buffer
-    timeReport.latency.start();
+        q.submit([&](sycl::handler& cgh) {
+            auto acc = buffer.get_access<sycl::access::mode::read_write>(cgh);
+            cgh.copy(acc, hostData.data());
+        }).wait();
 
-    q.submit([&](sycl::handler& cgh) {
-        auto acc = buffer.get_access<sycl::access::mode::read_write>(cgh);
-        cgh.copy(acc, hostData.data());
-    }).wait();
+        timeReport.latency.end();
 
-    timeReport.latency.end();
+        //Finalize job
+        
+        return timeReport;
 
-    //Finalize job
-    MPI_Finalize();
-    return timeReport;
-}
 
-void validate_nodes_size(int mpi_size, int node_id)
-{
-    if (mpi_size != 1)
-    {
-        if (node_id == 0)
+    };
+
+    void validate_nodes_size(int mpi_size, int node_id){
+        if (mpi_size != 1)
         {
-            printf(
-                "This program requires exactly 1 MPI ranks, "
-                "but you are attempting to use %d! Exiting...\n",
-                mpi_size);
+            if (node_id == 0)
+            {
+                printf(
+                    "This program requires exactly 1 MPI ranks, "
+                    "but you are attempting to use %d! Exiting...\n",
+                    mpi_size);
+            }
+            MPI_Finalize();
+            exit(0);
         }
-        MPI_Finalize();
-        exit(0);
     }
-}
+};
+
