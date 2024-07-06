@@ -17,7 +17,7 @@ double getLatency(TimeReport timeReport){
 int main(int argc, char* argv[]) {
     unsigned int numberOfWarmups = 0; 
     unsigned int numberOfRuns = 5;
-    unsigned int numberOfElems = 1048576; //4Gb double
+    unsigned int numberOfElems = 1048576;
 
     
     ExperimentArgs experimentArgs = ExperimentArgs<double>(
