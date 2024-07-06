@@ -8,7 +8,7 @@ class TimeReport {
 
     public:
         TimeCounter latency;
-        double bandwidth(double data_size, double time);   
+        double bandwidth_gb(double data_size, double time);   
 
 };
 

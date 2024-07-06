@@ -3,10 +3,12 @@
 
 #include "experiment_args.h"
 #include "time_report.h"
+
+template <typename T>
 class Experiment {
 
     public: 
-        virtual TimeReport run(ExperimentArgs args) = 0;
+        virtual TimeReport run(ExperimentArgs<T> args) = 0;
 
 };
 

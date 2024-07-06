@@ -13,19 +13,19 @@
 using namespace std;
 
 
-
+template <typename T>
 class ExperimentRunner {
     
     public:
-        ExperimentRunner(ExperimentArgs* args, Experiment* experimentToRun){
+        ExperimentRunner(ExperimentArgs<T>* args, Experiment<T>* experimentToRun){
             experimentArgs = args;
             experiment = experimentToRun;
             timeReports = std::vector<TimeReport>();
         }
 
-        ExperimentArgs *experimentArgs;
+        ExperimentArgs<T> *experimentArgs;
         std::vector<TimeReport> timeReports;
-        Experiment* experiment;
+        Experiment<T>* experiment;
 
         void runWarmups(){
             for (int i = 0; i < experimentArgs->numberOfWarmup; i++){
@@ -43,20 +43,18 @@ class ExperimentRunner {
                 TimeReport timeReport = experiment->run(*experimentArgs);
                 timeReports.push_back(timeReport);
             }
-
             dumpStatistics();               
         }
 
         void dumpStatistics(){
             // Data Mappers
             auto getLatency = [](TimeReport& timeReport) -> double {
-                return timeReport.latency.get_time();
+                return timeReport.latency.get_time_s();
             };
 
             auto getBandwidth = [&](TimeReport& timeReport) -> double {
-                return timeReport.bandwidth(experimentArgs->bufferSize, timeReport.latency.get_time());
+                return timeReport.bandwidth_gb(experimentArgs->getBufferSize(), timeReport.latency.time_ms);
             };
-
             // Bandwidth/Timing Data            
             std::vector<double> latencyData(timeReports.size());
             std::vector<double> bandwidthData(timeReports.size());
@@ -64,7 +62,7 @@ class ExperimentRunner {
             //Map TimeReport to latency (double)
             std::transform(timeReports.begin(), timeReports.end(), latencyData.begin(), getLatency);
             std::transform(timeReports.begin(), timeReports.end(), bandwidthData.begin(), getBandwidth);
-
+            
             ExperimentStatistic latencyStatisticData = ExperimentStatistic(latencyData);
             ExperimentStatistic bandwidthStatisticData = ExperimentStatistic(bandwidthData); 
 
@@ -75,16 +73,13 @@ class ExperimentRunner {
             std::cout << "Latency Min Time: " << latencyStatisticData.min() << "s" << std::endl;
 
 
-            std::cout << "Bandwidth Average: " << bandwidthStatisticData.avg() << "bytes/s" << std::endl;
-            std::cout << "Bandwidth Median: " << bandwidthStatisticData.median() << "bytes/s" << std::endl;
-            std::cout << "Bandwidth Max: " << bandwidthStatisticData.max() << "bytes/s" << std::endl;
-            std::cout << "Bandwidth Min: " << bandwidthStatisticData.min() <<  "bytes/s" << std::endl;
+            std::cout << "Bandwidth Average: " << bandwidthStatisticData.avg() << "(Gb/s)" << std::endl;
+            std::cout << "Bandwidth Median: " << bandwidthStatisticData.median() << "(Gb/s)" << std::endl;
+            std::cout << "Bandwidth Max: " << bandwidthStatisticData.max() << "(Gb/s)" << std::endl;
+            std::cout << "Bandwidth Min: " << bandwidthStatisticData.min() <<  "(Gb/s)" << std::endl;
         }
 
 };
-
-
-
 
 
 #endif

@@ -2,14 +2,14 @@
 #include "time_counter.h"
 
 void TimeCounter::start(){
-    time = MPI_Wtime();
+    time_ms = MPI_Wtime();
 }
 
 void TimeCounter::end(){
-    time = MPI_Wtime() - time;    
+    time_ms = MPI_Wtime() - time_ms;    
 }
 
-double TimeCounter::get_time(){
-    return time;
+double TimeCounter::get_time_s(){
+    return time_ms / 1e3;
 }
 
