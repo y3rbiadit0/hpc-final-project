@@ -9,13 +9,14 @@
 #include "../report_lib/experiment.h"
 #include "../report_lib/time_report.h"
 
-TimeReport gpu_to_gpu_cuda_mpi(int argc, char *argv[], ExperimentArgs experimentArgs) {
+class GPUtoGPU_CUDA_MPI: public Experiment{
+
+TimeReport run(ExperimentArgs experimentArgs) {
 	TimeReport timeReport= TimeReport();
 	// MPI - Node ID
 	int node_id, mpi_size;
 	
 	// Buffer Related Variables
-    int bufferSize = experimentArgs.bufferSize;
 	float *sBuf_h, *rBuf_h;
 	float *sBuf_d, *rBuf_d;
 	int i;
@@ -26,7 +27,6 @@ TimeReport gpu_to_gpu_cuda_mpi(int argc, char *argv[], ExperimentArgs experiment
 
 
 	// Init MPI
-	MPI_Init(&argc, &argv);
 	MPI_Comm_rank(MPI_COMM_WORLD, &node_id);
 	MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
@@ -39,58 +39,54 @@ TimeReport gpu_to_gpu_cuda_mpi(int argc, char *argv[], ExperimentArgs experiment
 	printf("Number of GPUs found = %d\n", deviceCount);
     printf("Assigned GPU %d to MPI rank %d of %d.\n", device_id, node_id, mpi_size);
 
-	// Allocate buffers host/device
-	//sBuf_h = malloc(bufferSize);
-	//rBuf_h = malloc(bufferSize);
-	
-	if (node_id == 0) {
+
+	const int nelem = experimentArgs.bufferSize;        // Buffer Elements number
+    const size_t nsize = nelem * sizeof(float);
+	int bufferSize = nsize;
+
+	if (node_id == 1) {
 		// Allocate Device Buffers
-        sBuf_h = malloc(bufferSize);
+        sBuf_h = (float*) malloc(bufferSize);
 		printf("sBuf_h[0] = %f\n", sBuf_h[0]);
 	    cudaMalloc((void **) &sBuf_d, bufferSize);
+
+		for (i = 0; i < bufferSize; ++i) {
+			sBuf_h[i] = (float) node_id;
+		}
+
+		// Move Data from CPU -> Device
+	    cudaMemcpy(sBuf_d, sBuf_h, bufferSize, cudaMemcpyHostToDevice);
 	}
     else{
 		// Allocate Device Buffers
-        rBuf_h = malloc(bufferSize);
+        rBuf_h = (float*) malloc(bufferSize);
 		printf("rBuf_h[0] = %f\n", rBuf_h[0]);
         cudaMalloc((void **) &rBuf_d, bufferSize);
     }
 
-    //TODO
-    for (i = 0; i < bufferSize; ++i) {
-		if(node_id==0)
-		{
-			sBuf_h[i] = (float) node_id;
-		}
-		else{
-			rBuf_h[i] = -1.;
-		}
-	}
-	
-	// Send Data GPU to GPU
-	if (node_id == 0) {     
-        // Move Data from CPU -> Device
-	    cudaMemcpy(sBuf_d, sBuf_h, bufferSize, cudaMemcpyHostToDevice);
+ 
+    MPI_Barrier(MPI_COMM_WORLD);
+	if(node_id==1){
 		//Measure latency
 		timeReport.latency.start();
         //Send information to other devices
-        MPI_Send(sBuf_d, LBUF, MPI_REAL, 0, 0, MPI_COMM_WORLD);
+        MPI_Send(sBuf_d, bufferSize, MPI_FLOAT, 0, 0, MPI_COMM_WORLD);
 
 		timeReport.latency.end();
-    } else {       
+
+	}
+	else{		
 		//Measure latency
 		timeReport.latency.start();
         //Received information from master
-    	MPI_Recv(rBuf_d, LBUF, MPI_REAL, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    	MPI_Recv(rBuf_d, bufferSize, MPI_FLOAT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
 		timeReport.latency.start();
         // Move Data from Device -> CPU
         cudaMemcpy(rBuf_h, rBuf_d, bufferSize, cudaMemcpyDeviceToHost);
-    } 
-
-    MPI_Barrier(MPI_COMM_WORLD);
-    MPI_Finalize();
+	}
 
 	return timeReport;
 
 }
+};
