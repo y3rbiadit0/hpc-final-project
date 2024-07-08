@@ -6,6 +6,7 @@
 // #include "sycl_mpi/cpu_to_gpu.cpp"
 // #include "cuda_mpi/cpu_to_gpu_cuda_mpi.cpp"
 #include "cuda_mpi/gpu_to_gpu_cuda_nvlink.cpp"
+#include "cuda_mpi/gpu_to_gpu_cuda_pcie.cpp"
 
 using namespace std;
 
@@ -15,9 +16,9 @@ double getLatency(TimeReport timeReport){
 }
 
 int main(int argc, char* argv[]) {
-    unsigned int numberOfWarmups = 0; 
-    unsigned int numberOfRuns = 5;
-    unsigned int numberOfElems = 1048576;
+    unsigned int numberOfWarmups = 20; 
+    unsigned int numberOfRuns = 50;
+    unsigned int numberOfElems = 2097152;
 
     
     ExperimentArgs experimentArgs = ExperimentArgs<double>(
@@ -25,12 +26,15 @@ int main(int argc, char* argv[]) {
     );
     
     GPUtoGPU_CUDA_NVLINK cuda_gpu_to_gpu_nvlink = GPUtoGPU_CUDA_NVLINK();
-    
+    GPUtoGPU_CUDA_PCIE cuda_gpu_to_gpu_pcie = GPUtoGPU_CUDA_PCIE();
+
     ExperimentRunner gpu_to_gpu_cuda_nvlink= ExperimentRunner<double>(&experimentArgs, &cuda_gpu_to_gpu_nvlink);
+    ExperimentRunner gpu_to_gpu_cuda_pcie= ExperimentRunner<double>(&experimentArgs, &cuda_gpu_to_gpu_pcie);
 
 
     MPI_Init(&argc, &argv);
     gpu_to_gpu_cuda_nvlink.runExperiment();
+    gpu_to_gpu_cuda_pcie.runExperiment();
 
     MPI_Finalize();
 }
