@@ -3,10 +3,8 @@
 #include "report_lib/experiment_runner.h"
 
 #include "report_lib/statistic.h"
-// #include "sycl_mpi/cpu_to_gpu.cpp"
-// #include "cuda_mpi/cpu_to_gpu_cuda_mpi.cpp"
-#include "cuda_mpi/gpu_to_gpu_cuda_nvlink.cpp"
-#include "cuda_mpi/gpu_to_gpu_cuda_pcie.cpp"
+#include "gpu_to_gpu_single_node/gpu_to_gpu_cuda_nvlink.cpp"
+#include "gpu_to_gpu_single_node/gpu_to_gpu_cuda_pcie.cpp"
 
 using namespace std;
 
