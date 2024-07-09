@@ -73,6 +73,8 @@
         "queue": "cpp",
         "stack": "cpp",
         "__bit_reference": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "__mutex_base": "cpp",
+        "cassert": "cpp"
     }
 }
