@@ -28,11 +28,12 @@ link_directories(${MPI_LIBRARIES})
 
 
 # Build executables
-include_directories(gpu_to_gpu_single_node/ report_lib/)
+include_directories(gpu_to_gpu_single_node/ report_lib/ utils/)
 file(GLOB GPU_TO_GPU_SRC ${CMAKE_SOURCE_DIR}/src/gpu_to_gpu_single_node/*.cpp)
 file(GLOB REPORT_LIB_SRC ${CMAKE_SOURCE_DIR}/report_lib/*.cpp)
+file(GLOB UTILS_SRC ${CMAKE_SOURCE_DIR}/utils/data_validator.hpp)
 
-add_executable(hpc-final-project ${REPORT_LIB_SRC} ${GPU_TO_GPU_SRC} main_gpu_to_gpu_1_node.cpp)
+add_executable(hpc-final-project ${REPORT_LIB_SRC} ${GPU_TO_GPU_SRC} ${UTILS_SRC} main_gpu_to_gpu_1_node.cpp)
 add_executable(device-query-sycl utils/device_query_sycl.cpp)
 
 # Set the target compile options

@@ -4,6 +4,7 @@ using namespace std;
 
 #include "../report_lib/experiment.h"
 #include "../report_lib/time_report.h"
+#include "../utils/data_validator.hpp"
 
 class CPUtoGPU_CUDA: public Experiment<double>{
 
@@ -12,6 +13,7 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     cudaEvent_t start;
     cudaEvent_t stop;
     TimeReport timeReport = TimeReport();
+    DataValidator<double> dataValidator = DataValidator<double>();
     
     // Memory Copy Size 
     float size =  experimentArgs.getBufferSize();
@@ -25,7 +27,8 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     // Allocate Memory CPU
 
     double *buffer_host = (double*) malloc(size);
-    
+    dataValidator.init_buffer(buffer_host, experimentArgs.numberOfElems);
+
     // Allocate Memory GPU
     double* buffer_device_0;
     cudaSetDevice(gpuid_0);
@@ -49,7 +52,9 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     float time_ms;
     cudaEventElapsedTime(&time_ms, start, stop);
     timeReport.latency.time_ms = time_ms;
- 
+    
+    dataValidator.validate_data(buffer_host, buffer_device_0, experimentArgs.numberOfElems);
+    
     printf("Seconds: %f\n", timeReport.latency.get_time_s());
     printf("Unidirectional Bandwidth: %f (GB/s)\n", timeReport.bandwidth_gb(size, timeReport.latency.time_ms));
   
