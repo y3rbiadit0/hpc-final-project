@@ -1,10 +1,10 @@
 #include <cuda_runtime.h>
 #include <iostream>
-using namespace std;
 
 #include "../report_lib/experiment.h"
 #include "../report_lib/time_report.h"
 #include "../utils/data_validator.hpp"
+using namespace std;
 
 class GPUtoGPU_CUDA_NVLINK: public Experiment<double>{
 
@@ -19,21 +19,28 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     float size =  experimentArgs.getBufferSize();
 
     // Log memory usage / Amount to transfer
-    cout << "Number of elems: "<< experimentArgs.numberOfElems << " - Memory Buffer Size (Mb): " << size / 1024 << endl; 
+    cout << "Number of elems: "<< experimentArgs.numberOfElems << " - Memory Buffer Size (Mb): " << size / 1024 << std::endl; 
 
        // GPUs
     int gpuid_0 = 0;
     int gpuid_1 = 1;
  
-    // Allocate Memory
+    // Allocate GPU Memory
     double* dev_0;
     cudaSetDevice(gpuid_0);
     cudaMalloc((void**)&dev_0, size);
-    dataValidator.init_buffer(dev_0, experimentArgs.numberOfElems);
-
     double* dev_1;
     cudaSetDevice(gpuid_1);
     cudaMalloc((void**)&dev_1, size);
+
+    // Allocate Host Memory
+    double *buffer_dev_0_host = static_cast<double*>(malloc(size));
+    double *buffer_dev_1_host = static_cast<double*>(malloc(size));
+    
+    // Init Buffer
+    dataValidator.init_buffer(buffer_dev_0_host, experimentArgs.numberOfElems);
+    cudaMemcpy(dev_0, buffer_dev_0_host, size, cudaMemcpyHostToDevice);
+
  
     //Check for peer access between participating GPUs: 
     int can_access_peer_0_1;
@@ -73,7 +80,10 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     cudaEventElapsedTime(&time_ms, start, stop);
     timeReport.latency.time_ms = time_ms;
     
-    dataValidator.validate_data(dev_0, dev_1, experimentArgs.numberOfElems);
+    //Validate Data Integrity
+    cudaMemcpy(buffer_dev_0_host, dev_0, size, cudaMemcpyDeviceToHost);
+    cudaMemcpy(buffer_dev_1_host, dev_1, size, cudaMemcpyDeviceToHost);
+    dataValidator.validate_data(buffer_dev_0_host, buffer_dev_1_host, experimentArgs.numberOfElems);
     
     printf("Seconds: %f\n", timeReport.latency.get_time_s());
     printf("Unidirectional Bandwidth: %f (GB/s)\n", timeReport.bandwidth_gb(size, timeReport.latency.time_ms));
@@ -89,6 +99,8 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     // Clean Up
     cudaFree(dev_0);
     cudaFree(dev_1);
+    free(buffer_dev_0_host);
+    free(buffer_dev_1_host);
  
     cudaEventDestroy(start);
     cudaEventDestroy(stop);

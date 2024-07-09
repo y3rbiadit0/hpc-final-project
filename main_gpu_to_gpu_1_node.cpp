@@ -17,7 +17,7 @@ double getLatency(TimeReport timeReport){
 
 int main(int argc, char* argv[]) {
     unsigned int numberOfWarmups = 0; 
-    unsigned int numberOfRuns = 10;
+    unsigned int numberOfRuns = 1;
     unsigned int numberOfElems = 2097152;
 
     
@@ -38,10 +38,14 @@ int main(int argc, char* argv[]) {
     ExperimentRunner gpu_to_gpu_cuda_pcie= ExperimentRunner<double>(&experimentArgs, &cuda_gpu_to_gpu_pcie);
     ExperimentRunner gpu_to_gpu_cuda_sycl_nvlink= ExperimentRunner<double>(&experimentArgs, &cuda_gpu_to_gpu_sycl_nvlink);
     
+    cout<< "CPU_TO_GPU -- CUDA RESULTS:"<< std::endl;
+    cpu_to_gpu_cuda.runExperiment();   
+    cout<< "GPU_TO_GPU -- CUDA RESULTS:"<< std::endl;
     gpu_to_gpu_cuda_nvlink.runExperiment();
+    cout<< "GPU_TO_GPU -- CUDA RESULTS:"<< std::endl;
     gpu_to_gpu_cuda_pcie.runExperiment();
     //gpu_to_gpu_cuda_sycl_nvlink.runExperiment();
-    cpu_to_gpu_cuda.runExperiment();
+
 }
 
 
