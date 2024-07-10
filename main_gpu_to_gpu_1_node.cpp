@@ -44,7 +44,8 @@ int main(int argc, char* argv[]) {
     gpu_to_gpu_cuda_nvlink.runExperiment();
     cout<< "GPU_TO_GPU -- CUDA RESULTS:"<< std::endl;
     gpu_to_gpu_cuda_pcie.runExperiment();
-    //gpu_to_gpu_cuda_sycl_nvlink.runExperiment();
+    cout<< "GPU_TO_GPU -- SYCL RESULTS:"<< std::endl;
+    gpu_to_gpu_cuda_sycl_nvlink.runExperiment();
 
 }
 

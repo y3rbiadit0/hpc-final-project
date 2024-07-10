@@ -4,6 +4,7 @@
 #include <cassert>
 #include <numeric>
 #include <vector>
+#include <chrono>
 
 
 #include "../report_lib/experiment.h"
@@ -11,21 +12,21 @@
 using namespace sycl;
 
 class GPUtoGPU_CUDA_SYCL_NVLINK : public Experiment<double>{
-  TimeReport run(ExperimentArgs<double> args)
+  TimeReport run(ExperimentArgs<double> experimentArgs)
   {
 
     TimeReport timeReport = TimeReport();
     std::vector<sycl::device> devices;
+    DataValidator<double> dataValidator;
     
     
     for (const auto &plt : sycl::platform::get_platforms()) {
-      std::cout <<"Device: " << plt.get_backend() << std::endl;
-      if (plt.get_backend() == sycl::backend::ext_oneapi_cuda)
+      if (plt.get_backend() == sycl::backend::ext_oneapi_cuda){
         devices.push_back(plt.get_devices()[0]);
+      }
     }
 
-
-    if (devices.size() <= 2) {
+    if (devices.size() < 2) {
       std::cout << "Cannot test P2P capabilities, at least two devices are "
                    "required, exiting."
                 << std::endl;
@@ -45,36 +46,36 @@ class GPUtoGPU_CUDA_SYCL_NVLINK : public Experiment<double>{
 
     // Enables Devs[0] to access Devs[1] memory.
     devices[0].ext_oneapi_enable_peer_access(devices[1]);
-    unsigned int numberOfElems = args.numberOfElems;
+    unsigned int numberOfElems = experimentArgs.numberOfElems;
     
-    std::vector<int> input(numberOfElems);
-    std::iota(input.begin(), input.end(), 0);
+    // Init Host Buffers
+    double *buffer_dev_0_host = static_cast<double*>(malloc(experimentArgs.getBufferSize()));
+    double *buffer_dev_1_host = static_cast<double*>(malloc(experimentArgs.getBufferSize())); 
+    dataValidator.init_buffer(buffer_dev_0_host, experimentArgs.numberOfElems);
 
-    int *arr0 = malloc<int>(numberOfElems, queues[0], usm::alloc::device);
-    queues[0].memcpy(arr0, &input[0], numberOfElems * sizeof(int));
-
-    int *arr1 = malloc<int>(numberOfElems, queues[1], usm::alloc::device);
+    // Allocate Dev Buffers 
+    double *buffer_dev_0 = malloc<double>(numberOfElems, queues[0], usm::alloc::device);
+    double *buffer_dev_1 = malloc<double>(numberOfElems, queues[1], usm::alloc::device);
+    
+    // Init Device Buffer
+    queues[0].memcpy(buffer_dev_0, buffer_dev_0_host, experimentArgs.getBufferSize());
+    
     // P2P copy performed here:
-    queues[1].copy(arr0, arr1, numberOfElems).wait();
+    auto start = std::chrono::high_resolution_clock::now();
+    queues[1].copy(buffer_dev_0, buffer_dev_1, numberOfElems).wait();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double, std::milli> time_ms = end - start;
+    timeReport.latency.time_ms = time_ms.count();
+ 
+    //Validate Data
+    queues[1].copy(buffer_dev_1, buffer_dev_1_host, numberOfElems).wait();
+    dataValidator.validate_data(buffer_dev_0_host, buffer_dev_1_host, experimentArgs.numberOfElems);
 
-    int out[numberOfElems];
-    queues[1].copy(arr1, out, numberOfElems).wait();
-
-    sycl::free(arr0, queues[0]);
-    sycl::free(arr1, queues[1]);
-
-    bool ok = true;
-    for (int i = 0; i < numberOfElems; i++)
-    {
-      if (out[i] != input[i])
-      {
-        printf("%d %d\n", out[i], input[i]);
-        ok = false;
-        break;
-      }
-    }
-
-    printf("%s\n", ok ? "PASS" : "FAIL");
+    // Free memory
+    free(buffer_dev_0_host);
+    free(buffer_dev_1_host);
+    sycl::free(buffer_dev_0, queues[0]);
+    sycl::free(buffer_dev_1, queues[1]);
 
     return timeReport;
   }

@@ -37,7 +37,7 @@ add_executable(hpc-final-project ${REPORT_LIB_SRC} ${GPU_TO_GPU_SRC} ${UTILS_SRC
 add_executable(device-query-sycl utils/device_query_sycl.cpp)
 
 # Set the target compile options
-target_compile_options(hpc-final-project PRIVATE -fsycl) 
+target_compile_options(hpc-final-project PRIVATE -fsycl -fsycl-targets=nvptx64-nvidia-cuda) 
 target_compile_options(device-query-sycl PRIVATE -fsycl) 
 
 # Set target link libraries

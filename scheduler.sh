@@ -13,9 +13,12 @@
 #SBATCH --profile=All
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=fmerenda2@studenti.unisa.it # Notification via email
+module unload cuda
 
-module load openmpi/4.1.6--gcc--12.2.0
-module load cuda/12.1
+module load gcc
+module load cuda/12.3
+source /leonardo/pub/userexternal/bcosenza/oneapi/setvars.sh --force
 
 echo "--------------------------- Testing MPI - Cineca Test ----"
-srun --cpu-freq=high -N 1 --ntasks-per-node=1 ./cuda_device_to_device_timing
+sycl-ls
+srun --cpu-freq=high -N 1 --ntasks-per-node=1 ./build/hpc-final-project
