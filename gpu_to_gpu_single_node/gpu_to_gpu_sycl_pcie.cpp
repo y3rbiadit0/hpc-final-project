@@ -5,16 +5,17 @@
 #include <numeric>
 #include <vector>
 #include <chrono>
-
+#include <cstdlib> // For setenv
 
 #include "../report_lib/experiment.h"
 #include "../report_lib/experiment_args.h"
+
 using namespace sycl;
 
-class GPUtoGPU_SYCL_NVLINK : public Experiment<double>{
+class GPUtoGPU_SYCL_PCIE : public Experiment<double>{
   TimeReport run(ExperimentArgs<double> experimentArgs)
   {
-
+    
     TimeReport timeReport = TimeReport();
     std::vector<sycl::device> devices;
     DataValidator<double> dataValidator;
@@ -41,9 +42,7 @@ class GPUtoGPU_SYCL_NVLINK : public Experiment<double>{
       std::cout << "P2P access is not supported by devices, exiting." << std::endl;
       return timeReport;
     }
-
-    // Enables Devs[0] to access Devs[1] memory.
-    devices[0].ext_oneapi_enable_peer_access(devices[1]);
+    devices[0].ext_oneapi_disable_peer_access(devices[1]);
     unsigned int numberOfElems = experimentArgs.numberOfElems;
     
     // Init Host Buffers
