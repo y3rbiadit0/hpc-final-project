@@ -11,11 +11,6 @@
 
 using namespace std;
 
-
-double getLatency(TimeReport timeReport){
-    return timeReport.latency.get_time_s();
-}
-
 int main(int argc, char* argv[]) {
     unsigned int numberOfWarmups = 0; 
     unsigned int numberOfRuns = 1;
@@ -51,8 +46,6 @@ int main(int argc, char* argv[]) {
     gpu_to_gpu_sycl_nvlink.runExperiment();
     cout<< "GPU_TO_GPU -- SYCL PCIE RESULTS:"<< std::endl;
     gpu_to_gpu_sycl_pcie.runExperiment();
-
-
 }
 
 
