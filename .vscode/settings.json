@@ -1,5 +1,6 @@
 {
     "files.associations": {
+        "CMakeLists_MPI.txt": "cmake",
         "__nullptr": "cpp",
         "exception": "cpp",
         "initializer_list": "cpp",
@@ -75,6 +76,10 @@
         "__bit_reference": "cpp",
         "filesystem": "cpp",
         "__mutex_base": "cpp",
-        "cassert": "cpp"
+        "cassert": "cpp",
+        "complex": "cpp",
+        "__locale": "cpp",
+        "ios": "cpp",
+        "__string": "cpp"
     }
 }

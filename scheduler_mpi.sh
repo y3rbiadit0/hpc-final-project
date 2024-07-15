@@ -20,4 +20,3 @@ module load openmpi/4.1.6--nvhpc--23.11
 echo "--------------------------- Testing MPI - Cineca Test ----"
 sycl-ls
 mpirun -np 2 ./build/hpc-final-project-mpi
-# mpirun -np 2 ./mpi_testx
