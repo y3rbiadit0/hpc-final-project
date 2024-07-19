@@ -25,3 +25,9 @@ make mpi_hello_world
 ```shell
 make clean
 ```
+
+
+
+## SYCL FULL PROJECT
+
+go to ~/intel/ and source setvars, then compile this project!! This is to get access to latest acess to ext-peer-access functions
