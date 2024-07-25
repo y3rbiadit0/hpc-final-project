@@ -43,7 +43,7 @@ class GPUtoGPU_SYCL_NVLINK : public Experiment<double>{
     }
 
     // Enables Devs[0] to access Devs[1] memory.
-    devices[0].ext_oneapi_enable_peer_access(devices[1]);
+    devices[0].ext_oneapi_enable_peer_access(devices[1]);    
     unsigned int numberOfElems = experimentArgs.numberOfElems;
     
     // Init Host Buffers
@@ -74,7 +74,7 @@ class GPUtoGPU_SYCL_NVLINK : public Experiment<double>{
     free(buffer_dev_1_host);
     sycl::free(buffer_dev_0, queues[0]);
     sycl::free(buffer_dev_1, queues[1]);
-
+    devices[0].ext_oneapi_disable_peer_access(devices[1]);  //To reset status of device for subsequent runs  
     return timeReport;
   }
   

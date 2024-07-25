@@ -18,10 +18,7 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     // Memory Copy Size 
     float size =  experimentArgs.getBufferSize();
 
-    // Log memory usage / Amount to transfer
-    cout << "Number of elems: "<< experimentArgs.numberOfElems << " - Memory Buffer Size (Mb): " << size / 1024 << std::endl; 
-
-       // GPUs
+    // GPUs
     int gpuid_0 = 0;
     int gpuid_1 = 1;
  
@@ -47,8 +44,6 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     int can_access_peer_1_0;
     cudaDeviceCanAccessPeer(&can_access_peer_0_1, gpuid_0, gpuid_1);
     cudaDeviceCanAccessPeer(&can_access_peer_1_0, gpuid_1, gpuid_0);
-    printf("cudaDeviceCanAccessPeer(%d->%d): %d\n", gpuid_0, gpuid_1, can_access_peer_0_1);
-    printf("cudaDeviceCanAccessPeer(%d->%d): %d\n", gpuid_1, gpuid_0, can_access_peer_1_0);
  
     if (can_access_peer_0_1 && can_access_peer_1_0) {
         // Enable P2P Access
@@ -85,9 +80,6 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     cudaMemcpy(buffer_dev_1_host, dev_1, size, cudaMemcpyDeviceToHost);
     dataValidator.validate_data(buffer_dev_0_host, buffer_dev_1_host, experimentArgs.numberOfElems);
     
-    printf("Seconds: %f\n", timeReport.latency.get_time_s());
-    printf("Unidirectional Bandwidth: %f (GB/s)\n", timeReport.bandwidth_gb(size, timeReport.latency.time_ms));
- 
     if (can_access_peer_0_1 && can_access_peer_1_0) {
         // Shutdown P2P Settings
         cudaSetDevice(gpuid_0);

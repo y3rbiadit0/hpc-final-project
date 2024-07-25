@@ -18,9 +18,6 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     // Memory Copy Size 
     unsigned long int size =  experimentArgs.getBufferSize();
 
-    // Log memory usage / Amount to transfer
-    cout << "Number of elems: "<< experimentArgs.numberOfElems << " - Memory Buffer Size (Mb): " << size / 1024 << std::endl; 
-
     // GPUs
     int gpuid_0 = 0;
  
@@ -53,9 +50,6 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     float time_ms;
     cudaEventElapsedTime(&time_ms, start, stop);
     timeReport.latency.time_ms = time_ms;
-    
-    printf("Seconds: %f\n", timeReport.latency.get_time_s());
-    printf("Unidirectional Bandwidth: %f (GB/s)\n", timeReport.bandwidth_gb(size, timeReport.latency.time_ms));
     
     //Validate Data Integrity
     cudaMemcpy(buffer_host_device, buffer_device_0, size, cudaMemcpyDeviceToHost);   

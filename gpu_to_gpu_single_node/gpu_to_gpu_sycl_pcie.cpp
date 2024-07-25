@@ -37,7 +37,7 @@ class GPUtoGPU_SYCL_PCIE : public Experiment<double>{
     std::vector<sycl::queue> queues;
     std::transform(devices.begin(), devices.end(), std::back_inserter(queues), [](const sycl::device &D) { return sycl::queue{D}; });
     
-
+    devices[0].ext_oneapi_enable_peer_access(devices[1]); //To reset status of device for subsequent runs
     if (!devices[0].ext_oneapi_can_access_peer(devices[1], sycl::ext::oneapi::peer_access::access_supported)) {
       std::cout << "P2P access is not supported by devices, exiting." << std::endl;
       return timeReport;
@@ -73,7 +73,7 @@ class GPUtoGPU_SYCL_PCIE : public Experiment<double>{
     free(buffer_dev_1_host);
     sycl::free(buffer_dev_0, queues[0]);
     sycl::free(buffer_dev_1, queues[1]);
-
+    
     return timeReport;
   }
   
