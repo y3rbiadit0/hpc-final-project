@@ -12,15 +12,18 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-    unsigned int numberOfWarmups = 0; 
-    unsigned int numberOfRuns = 1;
-    unsigned int numberOfElems = 2097152;
+    unsigned int numberOfWarmups = 10; 
+    unsigned int numberOfRuns = 30;
+    unsigned int numberOfElems =1048576;
 
     
     ExperimentArgs experimentArgs = ExperimentArgs<double>(
         argc, argv, numberOfWarmups, numberOfRuns, numberOfElems
     );
     
+    cout << "Number of elems: "<< experimentArgs.numberOfElems << " - Memory Buffer Size (MB): " << experimentArgs.getBufferSize() / 1024 << " - Memory Buffer Size (GB): " << experimentArgs.getBufferSize() / 1048576  << std::endl; 
+    
+
     CPUtoGPU_CUDA cuda_cpu_to_gpu = CPUtoGPU_CUDA();
     GPUtoGPU_CUDA_NVLINK cuda_gpu_to_gpu_nvlink = GPUtoGPU_CUDA_NVLINK();
     GPUtoGPU_CUDA_PCIE cuda_gpu_to_gpu_pcie = GPUtoGPU_CUDA_PCIE();
