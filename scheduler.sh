@@ -18,7 +18,7 @@ module unload cuda
 module load gcc
 module load cuda/12.3
 source /leonardo/pub/userexternal/bcosenza/oneapi/setvars.sh --force
-
+nvidia-smi nvlink -s
 echo "--------------------------- Testing MPI - Cineca Test ----"
 sycl-ls
 srun --cpu-freq=high -N 1 --ntasks-per-node=1 ./build/hpc-final-project

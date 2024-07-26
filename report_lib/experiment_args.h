@@ -5,7 +5,7 @@ template <typename T>
 class ExperimentArgs{
     public:
     // Parameterized Constructor
-    ExperimentArgs(int argc, char *argv[], unsigned int numberOfWarmupArg, unsigned int numberOfRunsArg, unsigned int numberOfElemsArg)
+    ExperimentArgs(int argc, char *argv[], unsigned int numberOfWarmupArg, unsigned int numberOfRunsArg, long unsigned int numberOfElemsArg)
     {
         argc = argc;
         argv = argv;
@@ -17,7 +17,7 @@ class ExperimentArgs{
         char *argv;
         unsigned int numberOfWarmup;
         unsigned int numberOfRuns;
-        unsigned int numberOfElems;
+        long unsigned int numberOfElems;
     
     unsigned long int getBufferSize() const { return numberOfElems * sizeof(T); }
 };
