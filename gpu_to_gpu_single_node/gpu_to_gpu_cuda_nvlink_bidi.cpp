@@ -8,6 +8,12 @@ using namespace std;
 
 class GPUtoGPU_CUDA_NVLINK_BIDI: public Experiment<double>{
 
+void checkError(cudaError_t err){
+    if (err != cudaSuccess) {
+        std::cerr << "CUDA malloc failed! Error: " << cudaGetErrorString(err) << std::endl;
+    }
+}
+
 TimeReport run(ExperimentArgs<double> experimentArgs) {
     cudaStream_t stream0;
     cudaStream_t stream1;
@@ -17,27 +23,37 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     DataValidator<double> dataValidator;
 
     // Memory Copy Size 
-    float size =  experimentArgs.getBufferSize();
+    unsigned long int size =  experimentArgs.getBufferSize();
 
     // GPUs
     int gpuid_0 = 0;
     int gpuid_1 = 1;
  
     // Allocate GPU Memory
-    double* dev_0;
+    double* dev_0_upstream;
+    double* dev_0_downstream;
     cudaSetDevice(gpuid_0);
-    cudaMalloc((void**)&dev_0, size);
-    double* dev_1;
+    checkError(cudaMalloc((void**)&dev_0_upstream, size));    
+    checkError(cudaMalloc((void**)&dev_0_downstream, size));
+
+
+    double* dev_1_upstream;
+    double* dev_1_downstream;
     cudaSetDevice(gpuid_1);
-    cudaMalloc((void**)&dev_1, size);
+    checkError(cudaMalloc((void**)&dev_1_upstream, size));    
+    checkError(cudaMalloc((void**)&dev_1_downstream, size));
 
     // Allocate Host Memory
-    double *buffer_dev_0_host = static_cast<double*>(malloc(size));
-    double *buffer_dev_1_host = static_cast<double*>(malloc(size));
-    
+    double *buffer_dev_0_host_upstream = static_cast<double*>(malloc(size));
+    double *buffer_dev_1_host_upstream = static_cast<double*>(malloc(size));
+
+    double *buffer_dev_2_host_downstream = static_cast<double*>(malloc(size));
+    double *buffer_dev_3_host_downstream = static_cast<double*>(malloc(size));
+
     // Init Buffer
-    dataValidator.init_buffer(buffer_dev_0_host, experimentArgs.numberOfElems);
-    cudaMemcpy(dev_0, buffer_dev_0_host, size, cudaMemcpyHostToDevice);
+    dataValidator.init_buffer(buffer_dev_0_host_upstream, experimentArgs.numberOfElems);
+    cudaMemcpy(dev_0_upstream, buffer_dev_0_host_upstream, size, cudaMemcpyHostToDevice);
+    cudaMemcpy(dev_1_downstream, buffer_dev_0_host_upstream, size, cudaMemcpyHostToDevice);
 
  
     //Check for peer access between participating GPUs: 
@@ -58,9 +74,6 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     cudaEventCreate(&start);
     cudaEventCreate(&stop);
  
-    // Init Stream
-    //cudaStreamCreateWithFlags(&stream, cudaStreamNonBlocking);
- 
     // ~~ Start Test ~~
     cudaStreamCreateWithFlags(&stream0, cudaStreamNonBlocking);
     cudaStreamCreateWithFlags(&stream1, cudaStreamNonBlocking);
@@ -68,24 +81,38 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
  
     //Do a P2P memcp
     cudaSetDevice(gpuid_0);
-    cudaMemcpyAsync(dev_0, dev_1, size, cudaMemcpyDeviceToDevice, stream0);
+    cudaMemcpyAsync(dev_0_upstream, dev_1_upstream, size, cudaMemcpyDeviceToDevice, stream0);
     cudaSetDevice(gpuid_1);
-    cudaMemcpyAsync(dev_1, dev_0, size, cudaMemcpyDeviceToDevice, stream1);
+    cudaMemcpyAsync(dev_1_downstream, dev_0_downstream, size, cudaMemcpyDeviceToDevice, stream1);
     
-    cudaEventRecord(stop);
     cudaStreamSynchronize(stream0);
     cudaStreamSynchronize(stream1);
+    
+    checkError(cudaEventRecord(stop));
+    checkError(cudaEventSynchronize(stop));
+    float milliseconds = 0;
+    checkError(cudaEventElapsedTime(&milliseconds, start, stop));
+
+    double bandwidthGBps = (2 * size / (1e9)) / (milliseconds / 1e3);
+    std::cout << "Two-way bandwidth: " << bandwidthGBps << " GB/s" << std::endl;
+
     // ~~ End of Test ~~
  
     // Check Timing & Performance
     float time_ms;
     cudaEventElapsedTime(&time_ms, start, stop);
     timeReport.latency.time_ms = time_ms;
+    double bandwidth = timeReport.bandwidth_gb(size * 2, time_ms);
+    cout<< "BANDWIDTH-REAL:" << bandwidth << std::endl;
 
     //Validate Data Integrity
-    cudaMemcpy(buffer_dev_0_host, dev_0, size, cudaMemcpyDeviceToHost);
-    cudaMemcpy(buffer_dev_1_host, dev_1, size, cudaMemcpyDeviceToHost);
-    dataValidator.validate_data(buffer_dev_0_host, buffer_dev_1_host, experimentArgs.numberOfElems);
+    cudaMemcpy(buffer_dev_0_host_upstream, dev_0_upstream, size, cudaMemcpyDeviceToHost);
+    cudaMemcpy(buffer_dev_1_host_upstream, dev_1_upstream, size, cudaMemcpyDeviceToHost);
+    cudaMemcpy(buffer_dev_2_host_downstream, dev_0_downstream, size, cudaMemcpyDeviceToHost);
+    cudaMemcpy(buffer_dev_3_host_downstream, dev_1_downstream, size, cudaMemcpyDeviceToHost);
+    dataValidator.validate_data(buffer_dev_0_host_upstream, buffer_dev_1_host_upstream, experimentArgs.numberOfElems);
+    dataValidator.validate_data(buffer_dev_2_host_downstream, buffer_dev_3_host_downstream, experimentArgs.numberOfElems);
+
     
     if (can_access_peer_0_1 && can_access_peer_1_0) {
         // Shutdown P2P Settings
@@ -96,10 +123,14 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     }
  
     // Clean Up
-    cudaFree(dev_0);
-    cudaFree(dev_1);
-    free(buffer_dev_0_host);
-    free(buffer_dev_1_host);
+    cudaFree(dev_0_upstream);
+    cudaFree(dev_1_upstream);
+    cudaFree(dev_0_downstream);
+    cudaFree(dev_1_downstream);
+    free(buffer_dev_0_host_upstream);
+    free(buffer_dev_1_host_upstream);
+    free(buffer_dev_2_host_downstream);
+    free(buffer_dev_3_host_downstream);
  
     cudaEventDestroy(start);
     cudaEventDestroy(stop);

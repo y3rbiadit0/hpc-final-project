@@ -73,10 +73,10 @@ class ExperimentRunner {
             std::cout << "Latency Min Time: " << latencyStatisticData.min() << "s" << std::endl;
 
 
-            std::cout << "Bandwidth Average: " << bandwidthStatisticData.avg() << "(Gb/s)" << std::endl;
-            std::cout << "Bandwidth Median: " << bandwidthStatisticData.median() << "(Gb/s)" << std::endl;
-            std::cout << "Bandwidth Max: " << bandwidthStatisticData.max() << "(Gb/s)" << std::endl;
-            std::cout << "Bandwidth Min: " << bandwidthStatisticData.min() <<  "(Gb/s)" << std::endl;
+            std::cout << "Bandwidth Average: " << bandwidthStatisticData.avg() << "(GB/s)" << std::endl;
+            std::cout << "Bandwidth Median: " << bandwidthStatisticData.median() << "(GB/s)" << std::endl;
+            std::cout << "Bandwidth Max: " << bandwidthStatisticData.max() << "(GB/s)" << std::endl;
+            std::cout << "Bandwidth Min: " << bandwidthStatisticData.min() <<  "(GB/s)" << std::endl;
         }
 
 };
