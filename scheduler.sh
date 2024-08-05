@@ -5,7 +5,7 @@
 #SBATCH --job-name=test #Job Name
 #SBATCH --error=test_error%j_err #Error dump file
 #SBATCH --output=test_output%j_out
-#SBATCH --time 00:10:00 #Be careful with this !!                          
+#SBATCH --time 00:00:20 #Be careful with this !!                          
 #SBATCH --nodes=1                                
 #SBATCH --ntasks-per-node=1 #Number of cpu cores by each node  - we can check on leonardo maximum number - 4 cores/ 1 for gpu                
 #SBATCH --gres=gpu:2

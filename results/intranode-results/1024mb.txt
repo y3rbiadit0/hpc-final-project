@@ -1,0 +1,73 @@
+Setup OneAPI - NVidia GPUs... - Running Script
+OK
+Setup OneAPI Vars Script ... - Running Script
+OK
+[opencl:acc:0] Intel(R) FPGA Emulation Platform for OpenCL(TM), Intel(R) FPGA Emulation Device OpenCL 1.2  [2023.16.12.0.12_195853.xmain-hotfix]
+[opencl:cpu:1] Intel(R) OpenCL, Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz OpenCL 3.0 (Build 0) [2023.16.12.0.12_195853.xmain-hotfix]
+[ext_oneapi_cuda:gpu:0] NVIDIA CUDA BACKEND, NVIDIA A100-SXM-64GB 8.0 [CUDA 12.1]
+[ext_oneapi_cuda:gpu:1] NVIDIA CUDA BACKEND, NVIDIA A100-SXM-64GB 8.0 [CUDA 12.1]
+--------------------------- Testing MPI - Cineca Test ----
+Number of elems: 134217728 - Memory Buffer Size (MB): 1024 - Memory Buffer Size (GB): 1
+CPU_TO_GPU -- CUDA RESULTS:
+Latency Average Time: 0.109435s
+Latency Median Time: 0.109403s
+Latency Max Time: 0.109618s
+Latency Min Time: 0.109346s
+Bandwidth Average: 9.13784(GB/s)
+Bandwidth Median: 9.14052(GB/s)
+Bandwidth Max: 9.1453(GB/s)
+Bandwidth Min: 9.12258(GB/s)
+GPU_TO_GPU -- CUDA PCIE RESULTS:
+Latency Average Time: 0.0507219s
+Latency Median Time: 0.0507366s
+Latency Max Time: 0.0508457s
+Latency Min Time: 0.0505854s
+Bandwidth Average: 19.7154(GB/s)
+Bandwidth Median: 19.7096(GB/s)
+Bandwidth Max: 19.7686(GB/s)
+Bandwidth Min: 19.6674(GB/s)
+GPU_TO_GPU -- CUDA NVLINK BIDIRECTIONAL RESULTS:
+Latency Average Time: 0.0115535s
+Latency Median Time: 0.0115533s
+Latency Max Time: 0.01156s
+Latency Min Time: 0.0115455s
+Bandwidth Average: 173.108(GB/s)
+Bandwidth Median: 173.11(GB/s)
+Bandwidth Max: 173.228(GB/s)
+Bandwidth Min: 173.011(GB/s)
+GPU_TO_GPU -- CUDA NVLINK RESULTS:
+Latency Average Time: 0.0114505s
+Latency Median Time: 0.0114501s
+Latency Max Time: 0.0114536s
+Latency Min Time: 0.0114439s
+Bandwidth Average: 87.3327(GB/s)
+Bandwidth Median: 87.3356(GB/s)
+Bandwidth Max: 87.3825(GB/s)
+Bandwidth Min: 87.3085(GB/s)
+GPU_TO_GPU -- SYCL NVLINK RESULTS:
+Latency Average Time: 0.0114869s
+Latency Median Time: 0.0114843s
+Latency Max Time: 0.0115104s
+Latency Min Time: 0.0114808s
+Bandwidth Average: 87.0556(GB/s)
+Bandwidth Median: 87.0756(GB/s)
+Bandwidth Max: 87.1016(GB/s)
+Bandwidth Min: 86.8778(GB/s)
+GPU_TO_GPU -- SYCL NVLINK BIDIRECTIONAL RESULTS:
+Latency Average Time: 0.01157s
+Latency Median Time: 0.0115691s
+Latency Max Time: 0.0115818s
+Latency Min Time: 0.0115608s
+Bandwidth Average: 172.861(GB/s)
+Bandwidth Median: 172.874(GB/s)
+Bandwidth Max: 172.999(GB/s)
+Bandwidth Min: 172.684(GB/s)
+GPU_TO_GPU -- SYCL PCIE RESULTS:
+Latency Average Time: 0.0510019s
+Latency Median Time: 0.0510144s
+Latency Max Time: 0.0510609s
+Latency Min Time: 0.050926s
+Bandwidth Average: 19.6071(GB/s)
+Bandwidth Median: 19.6023(GB/s)
+Bandwidth Max: 19.6363(GB/s)
+Bandwidth Min: 19.5845(GB/s)
