@@ -51,9 +51,13 @@ class ExperimentRunner {
             auto getLatency = [](TimeReport& timeReport) -> double {
                 return timeReport.latency.get_time_s();
             };
-
+            
             auto getBandwidth = [&](TimeReport& timeReport) -> double {
-                return timeReport.bandwidth_gb(experimentArgs->getBufferSize(), timeReport.latency.time_ms);
+                if (experimentArgs->isBidirectional){
+                    return timeReport.bandwidth_gb(2*experimentArgs->getBufferSize(), timeReport.latency.time_ms);
+                }else{        
+                    return timeReport.bandwidth_gb(experimentArgs->getBufferSize(), timeReport.latency.time_ms);
+                }
             };
             // Bandwidth/Timing Data            
             std::vector<double> latencyData(timeReports.size());
