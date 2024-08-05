@@ -90,21 +90,10 @@ TimeReport run(ExperimentArgs<double> experimentArgs) {
     
     checkError(cudaEventRecord(stop));
     checkError(cudaEventSynchronize(stop));
-    float milliseconds = 0;
-    checkError(cudaEventElapsedTime(&milliseconds, start, stop));
-
-    double bandwidthGBps = (2 * size / (1e9)) / (milliseconds / 1e3);
-    std::cout << "Two-way bandwidth: " << bandwidthGBps << " GB/s" << std::endl;
-
-    // ~~ End of Test ~~
- 
-    // Check Timing & Performance
-    float time_ms;
+    float time_ms = 0.0;
     cudaEventElapsedTime(&time_ms, start, stop);
     timeReport.latency.time_ms = time_ms;
-    double bandwidth = timeReport.bandwidth_gb(size * 2, time_ms);
-    cout<< "BANDWIDTH-REAL:" << bandwidth << std::endl;
-
+    
     //Validate Data Integrity
     cudaMemcpy(buffer_dev_0_host_upstream, dev_0_upstream, size, cudaMemcpyDeviceToHost);
     cudaMemcpy(buffer_dev_1_host_upstream, dev_1_upstream, size, cudaMemcpyDeviceToHost);

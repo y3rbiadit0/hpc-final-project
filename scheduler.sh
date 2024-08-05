@@ -18,8 +18,12 @@ module unload cuda
 module load gcc
 module load cuda/12.3
 
-sh oneapi-for-nvidia-gpus-2024.2.0-cuda-12.0-linux.sh --install-dir /leonardo/home/userexternal/fmerenda/intel/oneapi/
-source /leonardo/pub/userexternal/bcosenza/oneapi/setvars.sh --include-intel-llvm --force
+echo "Setup OneAPI - NVidia GPUs... - Running Script"
+sh oneapi-for-nvidia-gpus-2024.2.0-cuda-12.0-linux.sh --install-dir /leonardo/home/userexternal/fmerenda/intel/oneapi/ >> /dev/null
+echo "OK"
+echo "Setup OneAPI Vars Script ... - Running Script"
+source /leonardo/pub/userexternal/bcosenza/oneapi/setvars.sh --include-intel-llvm --force >> /dev/null
+echo "OK"
 sycl-ls
 
 echo "--------------------------- Testing MPI - Cineca Test ----"
