@@ -80,6 +80,8 @@
         "complex": "cpp",
         "__locale": "cpp",
         "ios": "cpp",
-        "__string": "cpp"
+        "__string": "cpp",
+        "variant": "cpp",
+        "*.inc": "cpp"
     }
 }
