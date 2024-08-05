@@ -32,24 +32,24 @@ int main(int argc, char* argv[]) {
     cout << "Number of elems: "<< experimentArgs.numberOfElems << " - Memory Buffer Size (MB): " << experimentArgs.getBufferSize() / (1024*1024) << " - Memory Buffer Size (GB): " << experimentArgs.getBufferSize() / (1048576*1024)  << std::endl; 
     
 
-    CPUtoGPU_CUDA cuda_cpu_to_gpu = CPUtoGPU_CUDA();
-    GPUtoGPU_CUDA_NVLINK cuda_gpu_to_gpu_nvlink = GPUtoGPU_CUDA_NVLINK();
-    GPUtoGPU_CUDA_NVLINK_BIDI cuda_gpu_to_gpu_nvlink_bidi = GPUtoGPU_CUDA_NVLINK_BIDI();
-    GPUtoGPU_CUDA_PCIE cuda_gpu_to_gpu_pcie = GPUtoGPU_CUDA_PCIE();
-    GPUtoGPU_SYCL_NVLINK_BIDI cuda_gpu_to_gpu_sycl_nvlink_bidi = GPUtoGPU_SYCL_NVLINK_BIDI();
-    GPUtoGPU_SYCL_NVLINK cuda_gpu_to_gpu_sycl_nvlink = GPUtoGPU_SYCL_NVLINK();
-    GPUtoGPU_SYCL_PCIE cuda_gpu_to_gpu_sycl_pcie = GPUtoGPU_SYCL_PCIE();
+    CPUtoGPU_CUDA cpu_to_gpu_cuda_exp = CPUtoGPU_CUDA();
+    GPUtoGPU_CUDA_NVLINK gpu_to_gpu_cuda_nvlink_exp = GPUtoGPU_CUDA_NVLINK();
+    GPUtoGPU_CUDA_NVLINK_BIDI gpu_to_gpu_cuda_nvlink_bidi_exp = GPUtoGPU_CUDA_NVLINK_BIDI();
+    GPUtoGPU_CUDA_PCIE gpu_to_gpu_cuda_pcie_exp = GPUtoGPU_CUDA_PCIE();
+    GPUtoGPU_SYCL_NVLINK_BIDI gpu_to_gpu_sycl_nvlink_bidi_exp = GPUtoGPU_SYCL_NVLINK_BIDI();
+    GPUtoGPU_SYCL_NVLINK gpu_to_gpu_sycl_nvlink_exp = GPUtoGPU_SYCL_NVLINK();
+    GPUtoGPU_SYCL_PCIE gpu_to_gpu_sycl_pcie_exp = GPUtoGPU_SYCL_PCIE();
 
     //CPU to GPU Experiments
-    ExperimentRunner cpu_to_gpu_cuda= ExperimentRunner<double>(&experimentArgs, &cuda_cpu_to_gpu);
+    ExperimentRunner cpu_to_gpu_cuda= ExperimentRunner<double>(&experimentArgs, &cpu_to_gpu_cuda_exp);
 
     //GPU to GPU Experiments
-    ExperimentRunner gpu_to_gpu_cuda_nvlink= ExperimentRunner<double>(&experimentArgs, &cuda_gpu_to_gpu_nvlink);
-    ExperimentRunner gpu_to_gpu_cuda_nvlink_bidi= ExperimentRunner<double>(&experimentArgsBidirectional, &cuda_gpu_to_gpu_nvlink_bidi);
-    ExperimentRunner gpu_to_gpu_cuda_pcie= ExperimentRunner<double>(&experimentArgs, &cuda_gpu_to_gpu_pcie);
-    ExperimentRunner gpu_to_gpu_sycl_nvlink_bidi = ExperimentRunner<double>(&experimentArgsBidirectional, &cuda_gpu_to_gpu_sycl_nvlink);
-    ExperimentRunner gpu_to_gpu_sycl_nvlink= ExperimentRunner<double>(&experimentArgs, &cuda_gpu_to_gpu_sycl_nvlink);
-    ExperimentRunner gpu_to_gpu_sycl_pcie= ExperimentRunner<double>(&experimentArgs, &cuda_gpu_to_gpu_sycl_pcie);
+    ExperimentRunner gpu_to_gpu_cuda_nvlink= ExperimentRunner<double>(&experimentArgs, &gpu_to_gpu_cuda_nvlink_exp);
+    ExperimentRunner gpu_to_gpu_cuda_nvlink_bidi= ExperimentRunner<double>(&experimentArgsBidirectional, &gpu_to_gpu_cuda_nvlink_bidi_exp);
+    ExperimentRunner gpu_to_gpu_cuda_pcie= ExperimentRunner<double>(&experimentArgs, &gpu_to_gpu_cuda_pcie_exp);
+    ExperimentRunner gpu_to_gpu_sycl_nvlink_bidi = ExperimentRunner<double>(&experimentArgsBidirectional, &gpu_to_gpu_sycl_nvlink_bidi_exp);
+    ExperimentRunner gpu_to_gpu_sycl_nvlink= ExperimentRunner<double>(&experimentArgs, &gpu_to_gpu_sycl_nvlink_exp);
+    ExperimentRunner gpu_to_gpu_sycl_pcie= ExperimentRunner<double>(&experimentArgs, &gpu_to_gpu_sycl_pcie_exp);
     
     cout<< "CPU_TO_GPU -- CUDA RESULTS:"<< std::endl;
     cpu_to_gpu_cuda.runExperiment();

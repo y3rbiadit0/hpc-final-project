@@ -46,23 +46,28 @@ public:
     // Initialize host buffers
     double *buffer_dev_0_host = static_cast<double*>(malloc(experimentArgs.getBufferSize()));
     double *buffer_dev_1_host = static_cast<double*>(malloc(experimentArgs.getBufferSize())); 
+
     dataValidator.init_buffer(buffer_dev_0_host, experimentArgs.numberOfElems);
 
     // Allocate device buffers 
-    double *buffer_dev_0 = malloc<double>(numberOfElems, queues[0], usm::alloc::device);
-    double *buffer_dev_1 = malloc<double>(numberOfElems, queues[1], usm::alloc::device);
-    
+    double *buffer_dev_0_upstream = malloc<double>(numberOfElems, queues[0], usm::alloc::device);
+    double *buffer_dev_0_downstream = malloc<double>(numberOfElems, queues[0], usm::alloc::device);
+
+    double *buffer_dev_1_upstream = malloc<double>(numberOfElems, queues[1], usm::alloc::device);
+    double *buffer_dev_1_downstream = malloc<double>(numberOfElems, queues[1], usm::alloc::device); 
+
     // Initialize device buffer for GPU 0
-    queues[0].memcpy(buffer_dev_0, buffer_dev_0_host, experimentArgs.getBufferSize()).wait();
+    queues[0].memcpy(buffer_dev_0_upstream, buffer_dev_0_host, experimentArgs.getBufferSize()).wait();
+    queues[0].memcpy(buffer_dev_1_downstream, buffer_dev_0_host, experimentArgs.getBufferSize()).wait();
 
     // Start the bidirectional P2P copy simultaneously
     auto start = std::chrono::high_resolution_clock::now();
     
     // Copy from GPU 0 to GPU 1
-    auto event1 = queues[1].copy(buffer_dev_0, buffer_dev_1, numberOfElems);
+    auto event1 = queues[1].copy(buffer_dev_0_upstream, buffer_dev_1_upstream, numberOfElems);
     
     // Copy from GPU 1 to GPU 0 simultaneously
-    auto event2 = queues[0].copy(buffer_dev_1, buffer_dev_0, numberOfElems);
+    auto event2 = queues[0].copy(buffer_dev_1_downstream, buffer_dev_0_downstream, numberOfElems);
 
     // Wait for both copy operations to complete
     event1.wait();
@@ -73,17 +78,19 @@ public:
     timeReport.latency.time_ms = time_ms.count();
 
     // Validate data transfer in both directions
-    queues[1].copy(buffer_dev_1, buffer_dev_1_host, numberOfElems).wait();
+    queues[1].copy(buffer_dev_1_upstream, buffer_dev_1_host, numberOfElems).wait();
     dataValidator.validate_data(buffer_dev_0_host, buffer_dev_1_host, experimentArgs.numberOfElems);
 
-    queues[0].copy(buffer_dev_0, buffer_dev_0_host, numberOfElems).wait();
-    dataValidator.validate_data(buffer_dev_1_host, buffer_dev_0_host, experimentArgs.numberOfElems);
+    queues[0].copy(buffer_dev_0_downstream, buffer_dev_1_host, numberOfElems).wait();
+    dataValidator.validate_data(buffer_dev_0_host, buffer_dev_1_host, experimentArgs.numberOfElems);
 
     // Free memory
     free(buffer_dev_0_host);
     free(buffer_dev_1_host);
-    sycl::free(buffer_dev_0, queues[0]);
-    sycl::free(buffer_dev_1, queues[1]);
+    sycl::free(buffer_dev_0_upstream, queues[0]);
+    sycl::free(buffer_dev_1_upstream, queues[1]);
+    sycl::free(buffer_dev_0_downstream, queues[0]);
+    sycl::free(buffer_dev_1_downstream, queues[1]);
 
     // Disable P2P access to reset the device status for subsequent runs
     devices[0].ext_oneapi_disable_peer_access(devices[1]);
