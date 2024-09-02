@@ -6,7 +6,8 @@ void TimeCounter::start(){
 }
 
 void TimeCounter::end(){
-    time_ms = MPI_Wtime() - time_ms;    
+    time_ms = MPI_Wtime() - time_ms;
+    time_ms *= 1000;    
 }
 
 double TimeCounter::get_time_s(){
