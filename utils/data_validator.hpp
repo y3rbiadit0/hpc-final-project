@@ -13,6 +13,7 @@ public:
     }
 
     void init_buffer(T* buffer, unsigned long int numberOfElems);
+    void init_buffer_with_value(T* buffer, unsigned long int numberOfElems, T value);
     void validate_data(T* buffer_host, T* buffer_host_out, unsigned long int numberOfElems);
 };
 
@@ -21,6 +22,13 @@ template <typename T>
 void DataValidator<T>::init_buffer(T* buffer, unsigned long int numberOfElems) {
     for (unsigned long int i = 0; i < numberOfElems; ++i) {
         buffer[i] = static_cast<T>(rand()) / RAND_MAX;
+    }
+}
+
+template <typename T>
+void DataValidator<T>::init_buffer_with_value(T* buffer, unsigned long int numberOfElems, T value) {
+    for (unsigned long int i = 0; i < numberOfElems; ++i) {
+        buffer[i] = value;
     }
 }
 
