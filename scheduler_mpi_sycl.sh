@@ -23,7 +23,6 @@ echo "Setup OneAPI Vars Script ... - Running Script"
 source /leonardo/pub/userexternal/bcosenza/oneapi/setvars.sh --include-intel-llvm --force >> /dev/null
 echo "OK"
 sycl-ls
-/leonardo/prod/opt/libraries/openmpi/4.1.6/nvhpc--23.11/
 
 
 

@@ -40,10 +40,10 @@ public:
 
         // Allocate Shared Memory
         if (node_id == 0) {
-            sBuf_shared = (double*) sycl::malloc_shared(bufferSize, device, context);
+            sBuf_shared = (double*) sycl::malloc_device(bufferSize, device, context);
             dataValidator.init_buffer_with_value(sBuf_shared, numElems, 1.0);
         } else {
-            rBuf_shared = (double*) sycl::malloc_shared(bufferSize, device, context);
+            rBuf_shared = (double*) sycl::malloc_device(bufferSize, device, context);
         }
 
         MPI_Barrier(MPI_COMM_WORLD);
