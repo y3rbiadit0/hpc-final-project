@@ -16,6 +16,16 @@
 
 module load cuda
 module load openmpi/4.1.6--nvhpc--23.11
+echo "Setup OneAPI - NVidia GPUs... - Running Script"
+sh oneapi-for-nvidia-gpus-2024.2.0-cuda-12.0-linux.sh --install-dir /leonardo/home/userexternal/fmerenda/intel/oneapi/ >> /dev/null
+echo "OK"
+echo "Setup OneAPI Vars Script ... - Running Script"
+source /leonardo/pub/userexternal/bcosenza/oneapi/setvars.sh --include-intel-llvm --force >> /dev/null
+echo "OK"
+sycl-ls
+/leonardo/prod/opt/libraries/openmpi/4.1.6/nvhpc--23.11/
+
+
 
 echo "--------------------------- Testing MPI - Cineca Test ----"
 
