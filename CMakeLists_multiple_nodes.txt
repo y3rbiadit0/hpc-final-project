@@ -36,4 +36,4 @@ target_compile_options(hpc-final-project-mpi PRIVATE -lcudart)
 
 
 # Set target link libraries
-target_link_libraries(hpc-final-project-mpi ${MPI_LIBRARIES} ${CUDA_LIBRARIES} -lcudart)
+target_link_libraries(hpc-final-project-mpi ${MPI_LIBRARIES} ${CUDA_LIBRARIES})
