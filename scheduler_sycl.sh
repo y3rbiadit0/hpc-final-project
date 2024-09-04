@@ -26,6 +26,6 @@ source /leonardo/pub/userexternal/bcosenza/oneapi/setvars.sh --include-intel-llv
 echo "OK"
 sycl-ls
 
-echo "--------------------------- Testing MPI - Cineca Test ----"
+echo "--------------------------- Testing SYCL/CUDA - Cineca Test ---------------------------"
 srun --cpu-freq=high -N 1 --ntasks-per-node=1 ./build/hpc-final-project
 # srun --cpu-freq=high -N 1 --ntasks-per-node=1 ./build/device-query-sycl

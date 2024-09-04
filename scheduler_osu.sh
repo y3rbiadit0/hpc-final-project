@@ -16,7 +16,8 @@
 
 module load cuda
 module load openmpi/4.1.6--nvhpc--23.11
+module load osu-micro-benchmarks/7.3--openmpi--4.1.6--nvhpc--23.11
+echo "--------------------------- Testing OSU Benchmarks - Cineca Test ---------------------------"
 
-echo "--------------------------- Testing MPI - Cineca Test ----"
-
-mpirun -np 2 ./build/hpc-final-project-mpi
+mpirun -map-by node -mca pml ucx -x UCX_TLS=rc,sm,gdr_copy,cuda_copy osu_bibw D D
+# mpirun -map-by node -mca pml ucx -x UCX_TLS=rc,sm,gdr_copy,cuda_copy osu_latency H H

@@ -26,6 +26,6 @@ sycl-ls
 
 
 
-echo "--------------------------- Testing MPI - Cineca Test ----"
+echo "--------------------------- Testing MPI/SYCL - Cineca Test ---------------------------"
 
 mpirun -np 2 ./build/hpc-final-project-mpi
