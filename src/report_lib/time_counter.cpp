@@ -1,5 +1,5 @@
 #include <mpi.h>
-#include "time_counter.h"
+#include "time_counter.hpp"
 
 void TimeCounter::start(){
     time_ms = MPI_Wtime();

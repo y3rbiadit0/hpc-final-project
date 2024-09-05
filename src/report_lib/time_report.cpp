@@ -1,4 +1,4 @@
-#include "time_report.h"
+#include "time_report.hpp"
 
 double TimeReport::bandwidth_gb(double data_size_bytes, double time_ms){
     double bandwidth = 0.0;

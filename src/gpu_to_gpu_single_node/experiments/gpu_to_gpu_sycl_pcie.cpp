@@ -7,8 +7,9 @@
 #include <chrono>
 #include <cstdlib> // For setenv
 
-#include "../report_lib/experiment.h"
-#include "../report_lib/experiment_args.h"
+#include "experiment.hpp"
+#include "time_report.hpp"
+#include "data_validator.hpp"
 
 using namespace sycl;
 

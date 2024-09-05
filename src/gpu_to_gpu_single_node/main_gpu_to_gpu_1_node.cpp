@@ -1,15 +1,15 @@
 #include <iostream>
 
-#include "report_lib/statistic.h"
-#include "report_lib/experiment.h"
-#include "report_lib/experiment_runner.h"
-#include "gpu_to_gpu_single_node/gpu_to_gpu_cuda_nvlink.cpp"
-#include "gpu_to_gpu_single_node/gpu_to_gpu_cuda_pcie.cpp"
-#include "gpu_to_gpu_single_node/gpu_to_gpu_sycl_nvlink.cpp"
-#include "gpu_to_gpu_single_node/gpu_to_gpu_sycl_pcie.cpp"
-#include "gpu_to_gpu_single_node/cpu_to_gpu_cuda.cpp"
-#include "gpu_to_gpu_single_node/gpu_to_gpu_cuda_nvlink_bidi.cpp"
-#include "gpu_to_gpu_single_node/gpu_to_gpu_sycl_nvlink_bidi.cpp"
+#include "statistic.hpp"
+#include "experiment.hpp"
+#include "experiment_runner.cpp"
+#include "gpu_to_gpu_cuda_nvlink.cpp"
+#include "gpu_to_gpu_cuda_pcie.cpp"
+#include "gpu_to_gpu_sycl_nvlink.cpp"
+#include "gpu_to_gpu_sycl_pcie.cpp"
+#include "cpu_to_gpu_cuda.cpp"
+#include "gpu_to_gpu_cuda_nvlink_bidi.cpp"
+#include "gpu_to_gpu_sycl_nvlink_bidi.cpp"
 
 using namespace std;
 

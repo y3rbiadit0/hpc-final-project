@@ -1,7 +1,7 @@
 #ifndef HPC_TIME_REPORT_H
 #define HPC_TIME_REPORT_H
 
-#include "time_counter.h"
+#include "time_counter.hpp"
 
 class TimeReport {
     

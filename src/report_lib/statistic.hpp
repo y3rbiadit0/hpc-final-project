@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "time_report.h"
+#include "time_report.hpp"
 
 class ExperimentStatistic {
     std::vector<double> data;    

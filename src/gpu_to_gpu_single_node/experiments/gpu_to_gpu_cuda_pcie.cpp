@@ -2,9 +2,9 @@
 #include <iostream>
 
 
-#include "../report_lib/experiment.h"
-#include "../report_lib/time_report.h"
-#include "../utils/data_validator.hpp"
+#include "experiment.hpp"
+#include "time_report.hpp"
+#include "data_validator.hpp"
 
 using namespace std;
 class GPUtoGPU_CUDA_PCIE: public Experiment<double>{

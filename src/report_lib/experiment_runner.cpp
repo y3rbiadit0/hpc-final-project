@@ -5,10 +5,10 @@
 #include <algorithm>
 #include <iostream>
 
-#include "time_report.h"
-#include "experiment.h"
-#include "experiment_args.h"
-#include "statistic.h"
+#include "time_report.hpp"
+#include "experiment.hpp"
+#include "experiment_args.hpp"
+#include "statistic.hpp"
 
 using namespace std;
 
