@@ -27,5 +27,4 @@ echo "OK"
 sycl-ls
 
 echo "--------------------------- Testing SYCL/CUDA - Cineca Test ---------------------------"
-srun --cpu-freq=high -N 1 --ntasks-per-node=1 ./src/gpu_to_gpu_single_node/build/single-node-sycl-cuda
-# srun --cpu-freq=high -N 1 --ntasks-per-node=1 ./build/device-query-sycl
+srun --cpu-freq=high -N 1 --ntasks-per-node=1 ./build/src/gpu_to_gpu_single_node/single-node-sycl-cuda

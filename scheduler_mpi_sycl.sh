@@ -28,4 +28,4 @@ sycl-ls
 
 echo "--------------------------- Testing MPI/SYCL - Cineca Test ---------------------------"
 
-mpirun -np 2 ./src/gpu_to_gpu_two_nodes/build/multiple-nodes-sycl-cuda-mpi
+mpirun -np 2 ./build/src/gpu_to_gpu_two_nodes/multiple-nodes-sycl-cuda-mpi
