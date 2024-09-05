@@ -26,3 +26,14 @@ This [project](https://github.com/y3rbiadit0/hpc-final-project/blob/main/report/
 - [OSU Benchmarks v7.3](https://mvapich.cse.ohio-state.edu/benchmarks/)
 
 ## Compile and Run Project
+
+1. Build Project
+```bash
+cmake -B build/
+make -C build
+```
+
+2. Batch job to the Booster Nodes
+```bash
+sbatch scheduler.sh
+```
