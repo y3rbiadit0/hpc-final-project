@@ -20,7 +20,7 @@ echo "Setup OneAPI - NVidia GPUs... - Running Script"
 sh oneapi-for-nvidia-gpus-2024.2.0-cuda-12.0-linux.sh --install-dir /leonardo/home/userexternal/fmerenda/intel/oneapi/ >> /dev/null
 echo "OK"
 echo "Setup OneAPI Vars Script ... - Running Script"
-source /leonardo/pub/userexternal/bcosenza/oneapi/setvars.sh --include-intel-llvm --force >> /dev/null
+source /leonardo/home/userexternal/fmerenda/intel/oneapi/setvars.sh --include-intel-llvm --force >> /dev/null
 echo "OK"
 sycl-ls
 
@@ -28,4 +28,4 @@ sycl-ls
 
 echo "--------------------------- Testing MPI/SYCL - Cineca Test ---------------------------"
 
-mpirun -np 2 ./build/hpc-final-project-mpi
+mpirun -np 2 ./src/gpu_to_gpu_two_nodes/build/multiple-nodes-sycl-cuda-mpi
