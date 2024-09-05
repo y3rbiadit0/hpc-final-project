@@ -1,10 +1,12 @@
-# Project
+# Intra-Node/Inter-Node Communication on the Leonardo CINECA Cluster - Booster Partition
 
 This project explores the communication capabilities of the Leonardo CINECA Cluster - Booster Partition, specifically focusing on intra-node and inter-node communication in a multi-GPU environment. The experiments were conducted using technologies like NVLink, PCIe, MPI, CUDA-Aware MPI, SYCL, and CUDA to measure the bandwidth and latency of data transfers across CPUs and GPUs within and between nodes.
-
-![Screenshot 2024-09-05 at 11 16 56 AM](https://github.com/user-attachments/assets/ec353395-c97c-443c-bd80-bc4210400ee7)
-
-![Screenshot 2024-09-05 at 11 17 24 AM](https://github.com/user-attachments/assets/97377bdd-012c-4537-a478-ad985721e66f)
+<div align="center">
+  <p float="center">
+    <img src="https://github.com/user-attachments/assets/ec353395-c97c-443c-bd80-bc4210400ee7" height="300" />
+    <img src="https://github.com/user-attachments/assets/97377bdd-012c-4537-a478-ad985721e66f" height="300" />
+  </p>
+</div>
 
 **Key Findings**
 
