@@ -1,6 +1,6 @@
 # Intra-Node/Inter-Node Communication on the Leonardo CINECA Cluster - Booster Partition
 
-This project explores the communication capabilities of the Leonardo CINECA Cluster - Booster Partition, specifically focusing on intra-node and inter-node communication in a multi-GPU environment. The experiments were conducted using technologies like NVLink, PCIe, MPI, CUDA-Aware MPI, SYCL, and CUDA to measure the bandwidth and latency of data transfers across CPUs and GPUs within and between nodes.
+This [project](https://github.com/y3rbiadit0/hpc-final-project/blob/main/report/intra_inter_node_communication_leonardo_cineca_cluster.pdf) explores the communication capabilities of the Leonardo CINECA Cluster - Booster Partition, specifically focusing on intra-node and inter-node communication in a multi-GPU environment. The experiments were conducted using technologies like NVLink, PCIe, MPI, CUDA-Aware MPI, SYCL, and CUDA to measure the bandwidth and latency of data transfers across CPUs and GPUs within and between nodes.
 <div align="center">
   <p float="left">
     <img src="https://github.com/user-attachments/assets/ec353395-c97c-443c-bd80-bc4210400ee7" height="300" />
@@ -26,3 +26,14 @@ This project explores the communication capabilities of the Leonardo CINECA Clus
 - [OSU Benchmarks v7.3](https://mvapich.cse.ohio-state.edu/benchmarks/)
 
 ## Compile and Run Project
+
+1. Build Project
+```bash
+cmake -B build/
+make -C build
+```
+
+2. Batch job to the Booster Nodes
+```bash
+sbatch scheduler.sh
+```
