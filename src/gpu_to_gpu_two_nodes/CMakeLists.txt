@@ -10,8 +10,8 @@ find_package(CUDA REQUIRED)
 find_package(MPI REQUIRED)
 
 
-set(CMAKE_CXX_COMPILER "mpic++")
-set(CMAKE_C_COMPILER "mpicc")
+set(CMAKE_CXX_COMPILER "/leonardo/prod/opt/libraries/openmpi/4.1.6/nvhpc--23.11/bin/mpic++")
+set(CMAKE_C_COMPILER "/leonardo/prod/opt/libraries/openmpi/4.1.6/nvhpc--23.11/bin/mpicc")
 
 # 2. Set include/lib CUDA
 include_directories(${CUDA_INCLUDE_DIRS})

@@ -51,7 +51,7 @@ set(UTILS_SRC
 add_executable(${PROJECT_NAME} ${REPORT_LIB_SRC} ${UTILS_SRC} main_gpu_to_gpu_1_node.cpp)
 
 # Set the target compile options
-target_compile_options(${PROJECT_NAME} PRIVATE -fsycl -fsycl-targets=nvptx64-nvidia-cuda) 
+target_compile_options(${PROJECT_NAME} PRIVATE -fsycl -fsycl-targets=nvptx64-nvidia-cuda -lpthread) 
 
 # Set target link libraries
-target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES} ${CUDA_LIBRARIES}  -lsycl)
+target_link_libraries(${PROJECT_NAME} ${MPI_LIBRARIES} ${CUDA_LIBRARIES}  -lsycl -lpthread)
