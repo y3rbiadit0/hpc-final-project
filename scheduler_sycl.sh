@@ -12,7 +12,7 @@
 # #SBATCH --mem-per-cpu=0 # This allocates memory for a dedicated way kind of
 #SBATCH --profile=All
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=fmerenda2@studenti.unisa.it # Notification via email
+#SBATCH --mail-user=FILL_ME # Notification via email
 module unload cuda
 
 module load gcc
