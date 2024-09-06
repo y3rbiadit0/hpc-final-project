@@ -27,13 +27,23 @@ This [project](https://github.com/y3rbiadit0/hpc-final-project/blob/main/report/
 
 ## Compile and Run Project
 
-1. Build Project
+1. Configure environment
 ```bash
-cmake -B build/
-make -C build
+source config_environment.sh
 ```
 
-2. Batch job to the Booster Nodes
+2. Run CMake to build build folder
 ```bash
-sbatch scheduler.sh
+cmake -B build
+```
+
+3. Build Binaries
+```bash
+make -C build/
+```
+
+4. Batch jobs
+```bash
+sbatch scheduler_sycl.sh 
+sbatch scheduler_mpi_sycl.sh 
 ```
