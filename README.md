@@ -18,7 +18,7 @@ This [project](https://github.com/y3rbiadit0/hpc-final-project/blob/main/report/
 ## Libraries Versions
 - CUDA: 12.1
 - [Intel® oneAPI tools](https://www.intel.com/content/www/us/en/developer/tools/oneapi/toolkits.html): v2024.2.0
-- [Codeplay plugin oneAPI for NVIDIA® GPUs](https://developer.codeplay.com/products/oneapi/nvidia/2024.2.1/guides/index): v2024.2.0
+- [Codeplay plugin oneAPI for NVIDIA® GPUs]([https://developer.codeplay.com/products/oneapi/nvidia/2024.2.1/guides/index](https://developer.codeplay.com/products/oneapi/nvidia/2025.0.0/guides/)): v2025.0.0
 - NVIDIA Driver: 530.30.02
 - Open MPI: 4.1.6 - Compiled with
   – UCX: 1.13.0
@@ -44,6 +44,11 @@ make -C build/
 
 4. Batch jobs
 ```bash
-sbatch scheduler_sycl.sh 
-sbatch scheduler_mpi_sycl.sh 
+sbatch scripts/run-inter-node-experiments.sh
+sbatch scripts/run-intra-node-experiments.sh
+sbatch scripts/run-osu-benchmarks.sh
 ```
+
+
+### Updates! - GDRCopy Support
+You can run osu-benchmarks to compare the results using gdrcopy, rdma and without it.
