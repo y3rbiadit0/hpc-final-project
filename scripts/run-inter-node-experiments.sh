@@ -1,10 +1,10 @@
 #!/bin/bash
 
-#SBATCH -A IscrC_EMPI 
+#SBATCH -A IscrC_NETTUNE_0 
 #SBATCH -p boost_usr_prod #Partition
-#SBATCH --job-name=test #Job Name
-#SBATCH --error=test_error%j_err #Error dump file
-#SBATCH --output=test_output%j_out
+#SBATCH --job-name=inter_node #Job Name
+#SBATCH --error=./results/inter_node_error_%j_err.txt #Error dump file
+#SBATCH --output=./results/inter_node_output_%j_out.txt
 #SBATCH --time 00:15:00 #Be careful with this !!                          
 #SBATCH --nodes=2                                
 #SBATCH --ntasks-per-node=1 #Number of cpu cores by each node  - we can check on leonardo maximum number - 4 cores/ 1 for gpu                
@@ -16,8 +16,8 @@
 
 module load cuda
 module load openmpi/4.1.6--nvhpc--23.11
-module load osu-micro-benchmarks/7.3--openmpi--4.1.6--nvhpc--23.11
-echo "--------------------------- Testing OSU Benchmarks - Cineca Test ---------------------------"
 
-mpirun -map-by node -mca pml ucx -x UCX_TLS=rc,sm,gdr_copy,cuda_copy osu_bibw D D
-# mpirun -map-by node -mca pml ucx -x UCX_TLS=rc,sm,gdr_copy,cuda_copy osu_latency H H
+sh ./scripts/oneapi-for-nvidia-gpus-2025.0.0-cuda-12.0-linux.sh --install-dir /leonardo/home/userexternal/fmerenda/intel/oneapi/ >> /dev/null
+source /leonardo/home/userexternal/fmerenda/intel/oneapi/setvars.sh --include-intel-llvm --force >> /dev/null
+
+mpirun -np 2 ./build/src/gpu_to_gpu_two_nodes/multiple-nodes-sycl-cuda-mpi
