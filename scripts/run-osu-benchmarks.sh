@@ -53,7 +53,7 @@ while getopts "t:m:w:i:d:" opt; do
 done
 
 
-mpirun -np 2 -x UCX_NET_DEVICES=all  -x UCX_IB_GPU_DIRECT_RDMA=1 -x UCX_TLS=rc,cuda_copy,gdr_copy -x UCX_RNDV_THRESH=1024  $OSU_BENCHMARK -T mpi_char -m $MESSAGE_SIZE -x $WARMUP_ITERATIONS -i $MAIN_ITERATIONS -d $DEVICE
+mpirun -np 2 -x UCX_NET_DEVICES=all  -x UCX_IB_GPU_DIRECT_RDMA=1 -x UCX_TLS=rc,cuda_copy,gdr_copy -x UCX_RNDV_THRESH=1024  $OSU_BENCHMARK -m $MESSAGE_SIZE -x $WARMUP_ITERATIONS -i $MAIN_ITERATIONS -d $DEVICE
 
 # GPUDirect RDMA disabled and GDR Copy enabled
 mpirun -np 2 -x UCX_NET_DEVICES=all  -x UCX_IB_GPU_DIRECT_RDMA=0 -x UCX_TLS=rc,cuda_copy,gdr_copy -x UCX_RNDV_THRESH=1024  $OSU_BENCHMARK -m $MESSAGE_SIZE -x $WARMUP_ITERATIONS -i $MAIN_ITERATIONS -d $DEVICE
