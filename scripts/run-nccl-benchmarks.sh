@@ -18,8 +18,5 @@
 module load openmpi
 module load cuda
 module load nccl
-# export NCCL_HOME=/leonardo/home/userexternal/fmerenda/nccl-2.19.3-1-cuoct3jempfrtirmnjwtxwr2wwgqrrbv
-
-# ./nccl-tests-binaries/sendrecv_perf -b 8 -e 2048M -f 2 -g 1
 
 NCCL_DEBUG=Info mpirun -np 2 /leonardo/home/userexternal/fmerenda/opt/nccl-tests/build/sendrecv_perf -b 8 -e 2048M -f 2 -g 1f
