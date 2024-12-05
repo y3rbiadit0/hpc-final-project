@@ -22,7 +22,7 @@ module load osu-micro-benchmarks/7.3--openmpi--4.1.6--nvhpc--23.11
 OSU_BENCHMARK="osu_latency"
 
 # Default Parameters for OSU Benchmark
-MESSAGE_SIZE="1073741824" # 1 GiB
+MESSAGE_SIZE="$(echo "2*1024^3" | bc)" # 1 GiB
 WARMUP_ITERATIONS="100"  # Warm-up iterations
 MAIN_ITERATIONS="100"    # Main test iterations
 DEVICE="cuda D D"        # Communication between CUDA devices
@@ -53,8 +53,7 @@ while getopts "t:m:w:i:d:" opt; do
 done
 
 
-# GPUDirect RDMA + GDR Copy (both enabled)
-mpirun -np 2 -x UCX_NET_DEVICES=all  -x UCX_IB_GPU_DIRECT_RDMA=1 -x UCX_TLS=rc,cuda_copy,gdr_copy -x UCX_RNDV_THRESH=1024  $OSU_BENCHMARK -m $MESSAGE_SIZE -x $WARMUP_ITERATIONS -i $MAIN_ITERATIONS -d $DEVICE
+mpirun -np 2 -x UCX_NET_DEVICES=all  -x UCX_IB_GPU_DIRECT_RDMA=1 -x UCX_TLS=rc,cuda_copy,gdr_copy -x UCX_RNDV_THRESH=1024  $OSU_BENCHMARK -T mpi_char -m $MESSAGE_SIZE -x $WARMUP_ITERATIONS -i $MAIN_ITERATIONS -d $DEVICE
 
 # GPUDirect RDMA disabled and GDR Copy enabled
 mpirun -np 2 -x UCX_NET_DEVICES=all  -x UCX_IB_GPU_DIRECT_RDMA=0 -x UCX_TLS=rc,cuda_copy,gdr_copy -x UCX_RNDV_THRESH=1024  $OSU_BENCHMARK -m $MESSAGE_SIZE -x $WARMUP_ITERATIONS -i $MAIN_ITERATIONS -d $DEVICE

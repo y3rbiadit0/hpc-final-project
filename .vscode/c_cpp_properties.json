@@ -4,10 +4,10 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/leonardo/home/userexternal/fmerenda/intel/oneapi/compiler/latest/include/**"
+                "/leonardo/home/userexternal/fmerenda/opt/intel/oneapi/compiler/latest/include/**"
             ],
             "defines": [],
-            "compilerPath": "/leonardo/home/userexternal/fmerenda/intel/oneapi/compiler/latest/bin/dpcpp",
+            "compilerPath": "/leonardo/home/userexternal/fmerenda/opt/intel/oneapi/compiler/latest/bin/dpcpp",
             "cStandard": "c17",
             "cppStandard": "gnu++17",
             "intelliSenseMode": "linux-gcc-x64",

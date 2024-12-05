@@ -8,13 +8,13 @@ find_package(MPI REQUIRED)
 
 # 1. Set DPCPP Compiler
 
-set(DPCPP_COMPILER "/leonardo/home/userexternal/fmerenda/intel/oneapi/compiler/latest/bin/dpcpp")
+set(DPCPP_COMPILER "/leonardo/home/userexternal/fmerenda/opt/intel/oneapi/compiler/latest/bin/dpcpp")
 set(CMAKE_C_COMPILER "mpiicpc")
 set(CMAKE_CXX_COMPILER ${DPCPP_COMPILER}) # Set the DPC++ compiler as the C++ compiler
 
 # Set include/lib for SYCL
-include_directories(/leonardo/home/userexternal/fmerenda/intel/oneapi/compiler/latest/include)
-link_directories(/leonardo/home/userexternal/fmerenda/intel/oneapi/compiler/latest/lib)
+include_directories(/leonardo/home/userexternal/fmerenda/opt/intel/oneapi/compiler/latest/include)
+link_directories(/leonardo/home/userexternal/fmerenda/opt/intel/oneapi/compiler/latest/lib)
 
 # 2. Set include/lib CUDA
 include_directories(${CUDA_INCLUDE_DIRS})

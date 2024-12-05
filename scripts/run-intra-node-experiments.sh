@@ -18,7 +18,7 @@ module unload cuda
 module load gcc
 module load cuda/12.3
 
-sh ./scripts/oneapi-for-nvidia-gpus-2025.0.0-cuda-12.0-linux.sh --install-dir /leonardo/home/userexternal/fmerenda/intel/oneapi/ >> /dev/null
-source /leonardo/home/userexternal/fmerenda/intel/oneapi/setvars.sh --include-intel-llvm --force >> /dev/null
+sh ./scripts/oneapi-for-nvidia-gpus-2025.0.0-cuda-12.0-linux.sh --install-dir /leonardo/home/userexternal/fmerenda/opt/intel/oneapi/ >> /dev/null
+source /leonardo/home/userexternal/fmerenda/opt/intel/oneapi/setvars.sh --include-intel-llvm --force >> /dev/null
 
 srun --cpu-freq=high -N 1 --ntasks-per-node=1 /leonardo/home/userexternal/fmerenda/hpc-final-project/build/src/gpu_to_gpu_single_node/single-node-sycl-cuda
